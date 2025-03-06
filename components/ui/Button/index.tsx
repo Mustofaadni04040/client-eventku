@@ -7,7 +7,7 @@ type PropTypes = {
   onClick?: () => void;
   children: React.ReactNode;
   disabled?: boolean | undefined;
-  loading?: string;
+  loading?: boolean;
 };
 
 export default function Button({

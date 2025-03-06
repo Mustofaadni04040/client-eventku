@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Axios Interceptor Instance
 const AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_HOST_DEV,
 });
 
 AxiosInstance.interceptors.request.use(
