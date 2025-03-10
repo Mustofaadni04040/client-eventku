@@ -9,9 +9,9 @@ import { Form } from "@/components/ui/form";
 import FormInput from "@/components/ui/FormField";
 import { ToasterContext } from "@/context/ToasterContext";
 import Breadcrumbs from "@/components/fragments/Breadcrumb";
-import AxiosInstance from "@/utils/axiosInstance";
 import { config } from "@/configs";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const formSchema = z.object({
   name: z.string().min(6, {
@@ -35,7 +35,7 @@ export default function CreateCategoriesPage() {
     const token = localStorage.getItem("token")?.split('"')[1];
     setLoading(true);
     try {
-      await AxiosInstance.post(
+      await axios.post(
         `${config.api_host_dev}/cms/categories`,
         {
           name: values.name,

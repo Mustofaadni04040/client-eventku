@@ -4,6 +4,9 @@ import "./globals.css";
 import { ToasterProvider } from "@/context/ToasterContext";
 import ToasterComponent from "@/components/ui/Providers/toaster";
 import Navbar from "@/components/fragments/Navbar";
+import { Providers } from "@/components/ui/Providers/providers";
+import AuthProvider from "@/components/ui/Providers/authProviders";
+import WithAuth from "@/components/ui/withAuth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,20 +22,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ToasterProvider>
-        <head>
-          <link
-            href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-            rel="stylesheet"
-            as="style"
-          />
-        </head>
-        <body className={inter.className}>
-          <Navbar />
-          {children}
-          <ToasterComponent />
-        </body>
-      </ToasterProvider>
+      <head>
+        <link
+          href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+          rel="stylesheet"
+          as="style"
+        />
+      </head>
+      <body className={inter.className}>
+        {/* redux */}
+        <Providers>
+          {/* auth: check token and role */}
+          <AuthProvider>
+            {/* protectedRoute */}
+            <WithAuth>
+              <ToasterProvider>
+                <Navbar />
+                {children}
+                <ToasterComponent />
+              </ToasterProvider>
+            </WithAuth>
+          </AuthProvider>
+        </Providers>
+      </body>
     </html>
   );
 }

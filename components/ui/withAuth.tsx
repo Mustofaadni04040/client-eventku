@@ -1,20 +1,22 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function WithAuth({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
+    const protectedRoute = ["/dashboard", "/categories"];
     const token = localStorage.getItem("token");
-    if (!token) {
+    if (!token && protectedRoute.some((route) => pathname.startsWith(route))) {
       router.replace("/auth/signin");
     } else {
       setIsAuthenticated(true);
     }
-  }, [router]);
+  }, [pathname, router]);
 
   if (!isAuthenticated) return null;
 

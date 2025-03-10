@@ -4,12 +4,13 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import AxiosInstance from "@/utils/axiosInstance";
 import { ToasterContext } from "@/context/ToasterContext";
 import { useRouter } from "next/navigation";
-import { config } from "@/configs";
 import FormInput from "@/components/ui/FormField";
 import AuthLayout from "@/components/layout/authLayout";
+import { postData } from "@/utils/fetch";
+import { useDispatch, useSelector } from "react-redux";
+import { setRole, setToken } from "@/redux/auth/authSlice";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -23,6 +24,7 @@ export default function SigninPage() {
   const { setToaster } = useContext(ToasterContext);
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+  const dispatch = useDispatch();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,17 +36,20 @@ export default function SigninPage() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     try {
-      const response = await AxiosInstance.post(
-        `${config.api_host_dev}/cms/auth/signin`,
-        {
-          email: values.email,
-          password: values.password,
-        }
-      );
+      const response = await postData(`/cms/auth/signin`, {
+        email: values.email,
+        password: values.password,
+      });
+
       localStorage.setItem(
         "token",
         JSON.stringify(response?.data?.data?.token)
       );
+      localStorage.setItem("role", JSON.stringify(response?.data?.data?.role));
+
+      dispatch(setToken(response?.data?.data?.token));
+      dispatch(setRole(response?.data?.data?.role));
+
       console.log(response);
       router.push("/dashboard");
       setToaster({

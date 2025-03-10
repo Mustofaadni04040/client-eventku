@@ -3,25 +3,22 @@
 import Breadcrumbs from "@/components/fragments/Breadcrumb";
 import STable from "@/components/fragments/Table";
 import Button from "@/components/ui/Button/index";
-import WithAuth from "@/components/ui/withAuth";
 import React from "react";
 
 export default function DashboardPage() {
   return (
-    <WithAuth>
-      <div className="container mx-auto my-10">
-        <Breadcrumbs />
+    <div className="container mx-auto my-10">
+      <Breadcrumbs />
 
-        <div className="my-5">
-          <div className="w-full flex justify-end">
-            <Button type="button" classname="bg-primary hover:bg-primary/90">
-              Tambah
-            </Button>
-          </div>
-
-          <STable />
+      <div className="my-5">
+        <div className="w-full flex justify-end">
+          <Button type="button" classname="bg-primary hover:bg-primary/90">
+            Tambah
+          </Button>
         </div>
+
+        <STable />
       </div>
-    </WithAuth>
+    </div>
   );
 }
