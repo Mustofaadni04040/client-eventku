@@ -14,8 +14,9 @@ export default function AuthProvider({
   useEffect(() => {
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("token");
-      const role = localStorage.getItem("role")
-        ? JSON.parse(localStorage.getItem("role")!)
+      const roleLocalStorage = localStorage.getItem("role");
+      const role = roleLocalStorage
+        ? JSON.parse(roleLocalStorage) 
         : null;
 
       if (token && role) {

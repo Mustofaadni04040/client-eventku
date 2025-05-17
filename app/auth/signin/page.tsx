@@ -41,21 +41,33 @@ export default function SigninPage() {
         password: values.password,
       });
 
-      localStorage.setItem(
-        "token",
-        JSON.stringify(response?.data?.data?.token)
-      );
-      localStorage.setItem("role", JSON.stringify(response?.data?.data?.role));
+      //jangan lupa kasih response jika not ok dan response undefined
+      if (response?.status !== 200) {
+        setError(response?.data?.msg);
+        setToaster({
+          variant: "danger",
+          message: response?.data?.msg,
+        });
+      } else {
+        localStorage.setItem(
+          "token",
+          JSON.stringify(response?.data?.data?.token)
+        );
+        localStorage.setItem(
+          "role",
+          JSON.stringify(response?.data?.data?.role)
+        );
 
-      dispatch(setToken(response?.data?.data?.token));
-      dispatch(setRole(response?.data?.data?.role));
+        dispatch(setToken(response?.data?.data?.token));
+        dispatch(setRole(response?.data?.data?.role));
 
-      console.log(response);
-      router.push("/dashboard");
-      setToaster({
-        variant: "success",
-        message: "Login Success",
-      });
+        console.log(response);
+        router.push("/dashboard");
+        setToaster({
+          variant: "success",
+          message: "Login Success",
+        });
+      }
     } catch (error: any) {
       console.log(error);
       setError(error?.response?.data?.msg || "Internal Server Error");

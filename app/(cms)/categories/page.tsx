@@ -2,7 +2,7 @@
 
 import Breadcrumbs from "@/components/fragments/Breadcrumb";
 import Button from "@/components/ui/Button/index";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Table,
   TableBody,
@@ -12,9 +12,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { config } from "@/configs";
 import Link from "next/link";
-import axios from "axios";
+import { getData } from "@/utils/fetch";
+import debounce from "debounce-promise";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useSelector } from "react-redux";
+import { accessCategories } from "@/utils/access";
 
 type PropTypes = {
   _id: string;
@@ -23,37 +26,50 @@ type PropTypes = {
 
 export default function CategoriesPage() {
   const [data, setData] = useState<PropTypes[]>([]);
+  const debouncedGetData = useMemo(() => debounce(getData, 1000), []);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [skeletonCount, setSkeletonCount] = useState<number>(5);
+  const role = useSelector((state: any) => state.auth.role);
+
+  const isHasAccess = (roles: string[]) => {
+    const some = roles?.some((item) => item === role);
+    return some;
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token")?.split('"')[1];
+
     const getCategoriesAPI = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get(
-          `${config.api_host_dev}/cms/categories`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        const response = await debouncedGetData(
+          `/cms/categories`,
+          undefined,
+          token
         );
-        setData(response.data.data);
+        setData(response?.data?.data);
+        setSkeletonCount(response?.data?.data?.length);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
     getCategoriesAPI();
-  }, []);
+  }, [debouncedGetData]);
 
   return (
-    <div className="container mx-auto my-10">
+    <div className="max-w-7xl mx-auto my-10">
       <Breadcrumbs textSecond="categories" />
 
       <div className="my-5">
         <div className="w-full flex justify-end">
-          <Button type="button" classname="bg-primary hover:bg-primary/90">
-            <Link href="/categories/create">Tambah</Link>
-          </Button>
+          {isHasAccess(accessCategories.tambah) && (
+            <Button type="button" classname="bg-primary hover:bg-primary/90">
+              <Link href="/categories/create">Tambah</Link>
+            </Button>
+          )}
         </div>
 
         <Table className="my-5">
@@ -67,16 +83,52 @@ export default function CategoriesPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((item: { _id: string; name: string }, index: number) => (
-              <TableRow key={`${item._id}${index}`}>
-                <TableCell className="font-medium">{index + 1}</TableCell>
-                <TableCell></TableCell>
-                <TableCell>{item.name}</TableCell>
-                <TableCell className="text-right">
-                  <i className="bx bx-dots-horizontal-rounded" />
-                </TableCell>
-              </TableRow>
-            ))}
+            {loading
+              ? Array.from({ length: skeletonCount || 5 }).map((_, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium">
+                      <Skeleton className="h-4 w-[200px]" />
+                    </TableCell>
+                    <TableCell></TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-[200px]" />
+                    </TableCell>
+                    <TableCell className="text-right flex justify-end">
+                      <Skeleton className="h-4 w-[50px]" />
+                    </TableCell>
+                  </TableRow>
+                ))
+              : data?.map(
+                  (item: { _id: string; name: string }, index: number) => (
+                    <TableRow key={`${item._id}${index}`}>
+                      <TableCell className="font-medium">{index + 1}</TableCell>
+                      <TableCell></TableCell>
+                      <TableCell>{item.name}</TableCell>
+                      <TableCell className="text-right flex justify-end">
+                        <div className="flex items-center gap-3">
+                          {isHasAccess(
+                            accessCategories.edit || accessCategories.hapus
+                          ) && (
+                            <>
+                              <Button
+                                type="button"
+                                classname="bg-transparent border border-primary text-primary hover:bg-slate-100"
+                              >
+                                Edit
+                              </Button>
+                              <Button
+                                type="button"
+                                classname="bg-red-500 hover:bg-red-600"
+                              >
+                                Delete
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )
+                )}
           </TableBody>
         </Table>
       </div>

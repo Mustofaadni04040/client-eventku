@@ -63,8 +63,8 @@ export default function CreateCategoriesPage() {
   }
 
   return (
-    <div className="container mx-auto">
-      <div className="my-5">
+    <div className="max-w-7xl mx-auto">
+      <div className="mt-5 mb-16">
         <Breadcrumbs
           textSecond="categories"
           textThird="create"
@@ -85,9 +85,9 @@ export default function CreateCategoriesPage() {
               type="text"
               placeholder="Masukkan nama kategori"
             />
-            {form.formState.errors && (
+            {form?.formState?.errors && (
               <p className="text-xs text-red-500">
-                {form.formState.errors.name?.message}
+                {form?.formState?.errors?.name?.message}
               </p>
             )}
             {error && !form.formState.errors && (

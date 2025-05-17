@@ -3,12 +3,12 @@ import axios from "axios";
 import { config } from "../configs";
 import getFromLocalStorage from "./getToken";
 
-export async function getData(url: string, params: string) {
+export async function getData(
+  url: string,
+  params?: Record<string, any>,
+  token?: string
+) {
   try {
-    const { token } = getFromLocalStorage("token")
-      ? JSON.parse(getFromLocalStorage("token") || "{}")
-      : {};
-
     return await axios.get(`${config.api_host_dev}${url}`, {
       params,
       headers: {
