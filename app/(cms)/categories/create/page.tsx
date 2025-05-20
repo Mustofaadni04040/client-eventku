@@ -9,9 +9,10 @@ import { Form } from "@/components/ui/form";
 import FormInput from "@/components/ui/FormField";
 import { ToasterContext } from "@/context/ToasterContext";
 import Breadcrumbs from "@/components/fragments/Breadcrumb";
-import { config } from "@/configs";
 import { useRouter } from "next/navigation";
+import { postData } from "@/utils/fetch";
 import axios from "axios";
+import { config } from "@/configs";
 
 const formSchema = z.object({
   name: z.string().min(6, {
@@ -32,26 +33,27 @@ export default function CreateCategoriesPage() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const token = localStorage.getItem("token")?.split('"')[1];
     setLoading(true);
     try {
-      await axios.post(
-        `${config.api_host_dev}/cms/categories`,
+      const token = JSON.parse(localStorage.getItem("token") || "");
+      const response = await postData(
+        `/cms/categories`,
         {
           name: values.name,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        undefined,
+        token
       );
-      router.push("/categories");
-      setToaster({
-        variant: "success",
-        message: "Kategori berhasil ditambahkan",
-      });
+
+      if (response?.status === 201) {
+        router.push("/categories");
+        setToaster({
+          variant: "success",
+          message: "Kategori berhasil ditambahkan",
+        });
+      }
     } catch (error: any) {
+      console.log(error);
       setError(error?.response?.data?.msg || "Internal Server Error");
       setToaster({
         variant: "danger",
@@ -94,11 +96,12 @@ export default function CreateCategoriesPage() {
               <p className="text-xs text-red-500">{error}</p>
             )}
             <Button
+              loading={loading}
               disabled={loading}
               type="submit"
               classname="bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? "Loading..." : "Tambah"}
+              Simpan
             </Button>
           </form>
         </Form>

@@ -1,7 +1,6 @@
 import React from "react";
 import FormInput from "../FormField";
 import Button from "@/components/ui/Button/index";
-import Modal from "@/components/layout/modalLayout";
 import { Form } from "../form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,15 +12,16 @@ const formSchema = z.object({
   }),
 });
 
-export default function FormCategories({ onClose }: any) {
+export default function FormCategories() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
     },
   });
+
   return (
-    <Modal onClose={onClose}>
+    <>
       <h1 className="text-2xl font-medium mb-4">Tambah Kategori</h1>
       <Form {...form}>
         <form
@@ -40,6 +40,6 @@ export default function FormCategories({ onClose }: any) {
           </Button>
         </form>
       </Form>
-    </Modal>
+    </>
   );
 }

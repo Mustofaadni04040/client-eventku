@@ -1,39 +1,40 @@
-import React, { useEffect, useRef } from "react";
-import styles from "./Modal.module.scss";
+import React from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 type Proptypes = {
-  children: React.ReactNode;
-  onClose: any;
+  children?: React.ReactNode;
+  openModal: boolean;
+  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  title: string;
+  loading?: boolean;
 };
 
-export default function Modal({ children, onClose }: Proptypes) {
-  const ref: any = useRef();
-
-  useEffect(() => {
-    const handleClickOutside = (e: any) => {
-      if (ref.current && !ref.current.contains(e.target)) {
-        onClose();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [onClose]);
-
+export default function Modal({
+  children,
+  openModal,
+  setOpenModal,
+  title,
+}: Proptypes) {
   return (
-    <div className="fixed top-0 h-screen w-screen z-[1000] bg-black bg-opacity-60 backdrop-blur-sm transition-opacity duration-500 flex items-center justify-center">
-      <div
-        className="relative bg-white p-5 w-[500px] overflow-y-auto rounded-2xl"
-        ref={ref}
-      >
-        <button onClick={onClose}>
-          <i className="bx bx-x top-3 right-3 absolute text-2xl text-slate-500" />
-        </button>
-        {children}
-      </div>
+    <div>
+      <Dialog open={openModal}>
+        <DialogContent
+          className="sm:max-w-[600px] [&>button]:hidden"
+          onInteractOutside={() => setOpenModal(!openModal)}
+        >
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+            <DialogDescription />
+          </DialogHeader>
+          {children}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

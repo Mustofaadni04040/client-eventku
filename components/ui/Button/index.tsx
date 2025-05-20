@@ -1,7 +1,7 @@
 import React from "react";
 import { Button as BaseButton } from "@/components/ui/button";
 
-type PropTypes = {
+type PropTypes = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   type: "button" | "submit" | "reset" | undefined;
   classname: string;
   onClick?: () => void;
@@ -10,22 +10,22 @@ type PropTypes = {
   loading?: boolean;
 };
 
-export default function Button({
-  onClick,
-  children,
-  disabled,
-  loading,
-  type,
-  classname,
-}: PropTypes) {
-  return (
-    <BaseButton
-      onClick={onClick}
-      disabled={disabled}
-      type={type}
-      className={classname}
-    >
-      {loading ? "Loading..." : children}
-    </BaseButton>
-  );
-}
+const Button = React.forwardRef<HTMLButtonElement, PropTypes>(
+  ({ onClick, children, disabled, loading, type, classname }, ref) => {
+    return (
+      <BaseButton
+        ref={ref}
+        onClick={onClick}
+        disabled={disabled}
+        type={type}
+        className={classname}
+      >
+        {loading ? "Loading..." : children}
+      </BaseButton>
+    );
+  }
+);
+
+Button.displayName = "Button";
+
+export default Button;

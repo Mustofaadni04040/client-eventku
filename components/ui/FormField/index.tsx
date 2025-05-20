@@ -15,7 +15,7 @@ export default function FormInput({
       name={name}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{label}</FormLabel>
+          <FormLabel asChild>{label}</FormLabel>
           <FormControl>
             <Input
               type={type}

@@ -18,6 +18,7 @@ import debounce from "debounce-promise";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSelector } from "react-redux";
 import { accessCategories } from "@/utils/access";
+import ModalUpdateCategories from "@/components/fragments/ModalUpdateCategories";
 
 type PropTypes = {
   _id: string;
@@ -30,6 +31,16 @@ export default function CategoriesPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [skeletonCount, setSkeletonCount] = useState<number>(5);
   const role = useSelector((state: any) => state.auth.role);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [selectedCategories, setSelectedCategories] = useState<{
+    _id: string;
+    name: string;
+  } | null>(null);
+
+  const handleEdit = (category: { _id: string; name: string }) => {
+    setSelectedCategories(category);
+    setOpenModal(true);
+  };
 
   const isHasAccess = (roles: string[]) => {
     const some = roles?.some((item) => item === role);
@@ -37,8 +48,7 @@ export default function CategoriesPage() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token")?.split('"')[1];
-
+    const token = JSON.parse(localStorage.getItem("token") || "");
     const getCategoriesAPI = async () => {
       setLoading(true);
       try {
@@ -87,7 +97,7 @@ export default function CategoriesPage() {
               ? Array.from({ length: skeletonCount || 5 }).map((_, index) => (
                   <TableRow key={index}>
                     <TableCell className="font-medium">
-                      <Skeleton className="h-4 w-[200px]" />
+                      <Skeleton className="h-4 w-[50px]" />
                     </TableCell>
                     <TableCell></TableCell>
                     <TableCell>
@@ -113,6 +123,7 @@ export default function CategoriesPage() {
                               <Button
                                 type="button"
                                 classname="bg-transparent border border-primary text-primary hover:bg-slate-100"
+                                onClick={() => handleEdit(item)}
                               >
                                 Edit
                               </Button>
@@ -132,6 +143,17 @@ export default function CategoriesPage() {
           </TableBody>
         </Table>
       </div>
+
+      {openModal && (
+        <ModalUpdateCategories
+          loading={loading}
+          setLoading={setLoading}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          selectedCategories={selectedCategories}
+          setData={setData}
+        />
+      )}
     </div>
   );
 }

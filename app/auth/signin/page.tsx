@@ -36,19 +36,13 @@ export default function SigninPage() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     try {
-      const response = await postData(`/cms/auth/signin`, {
+      const response = await postData("/cms/auth/signin", {
         email: values.email,
         password: values.password,
       });
 
       //jangan lupa kasih response jika not ok dan response undefined
-      if (response?.status !== 200) {
-        setError(response?.data?.msg);
-        setToaster({
-          variant: "danger",
-          message: response?.data?.msg,
-        });
-      } else {
+      if (response?.status === 200) {
         localStorage.setItem(
           "token",
           JSON.stringify(response?.data?.data?.token)
