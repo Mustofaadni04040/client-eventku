@@ -19,11 +19,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useSelector } from "react-redux";
 import { accessCategories } from "@/utils/access";
 import ModalUpdateCategories from "@/components/fragments/ModalUpdateCategories";
+import ModalDeleteCategories from "@/components/fragments/ModalDeleteCategories";
 
 type PropTypes = {
   _id: string;
   name: string;
 };
+
+type TypeModal = "edit" | "delete" | null;
 
 export default function CategoriesPage() {
   const [data, setData] = useState<PropTypes[]>([]);
@@ -32,15 +35,11 @@ export default function CategoriesPage() {
   const [skeletonCount, setSkeletonCount] = useState<number>(5);
   const role = useSelector((state: any) => state.auth.role);
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [modalType, setModalType] = useState<TypeModal>(null);
   const [selectedCategories, setSelectedCategories] = useState<{
     _id: string;
     name: string;
   } | null>(null);
-
-  const handleEdit = (category: { _id: string; name: string }) => {
-    setSelectedCategories(category);
-    setOpenModal(true);
-  };
 
   const isHasAccess = (roles: string[]) => {
     const some = roles?.some((item) => item === role);
@@ -123,13 +122,22 @@ export default function CategoriesPage() {
                               <Button
                                 type="button"
                                 classname="bg-transparent border border-primary text-primary hover:bg-slate-100"
-                                onClick={() => handleEdit(item)}
+                                onClick={() => {
+                                  setOpenModal(!openModal);
+                                  setModalType("edit");
+                                  setSelectedCategories(item);
+                                }}
                               >
                                 Edit
                               </Button>
                               <Button
                                 type="button"
                                 classname="bg-red-500 hover:bg-red-600"
+                                onClick={() => {
+                                  setOpenModal(!openModal);
+                                  setModalType("delete");
+                                  setSelectedCategories(item);
+                                }}
                               >
                                 Delete
                               </Button>
@@ -144,7 +152,7 @@ export default function CategoriesPage() {
         </Table>
       </div>
 
-      {openModal && (
+      {modalType === "edit" && (
         <ModalUpdateCategories
           loading={loading}
           setLoading={setLoading}
@@ -152,6 +160,18 @@ export default function CategoriesPage() {
           setOpenModal={setOpenModal}
           selectedCategories={selectedCategories}
           setData={setData}
+        />
+      )}
+
+      {modalType === "delete" && (
+        <ModalDeleteCategories
+          loading={loading}
+          setLoading={setLoading}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          selectedCategories={selectedCategories}
+          setData={setData}
+          data={data}
         />
       )}
     </div>

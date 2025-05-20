@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Modal from "../layout/modalLayout";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import Button from "../ui/Button/index";
@@ -38,9 +38,15 @@ export default function ModalUpdateCategories({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: selectedCategories?.name || "",
+      name: selectedCategories?.name,
     },
   });
+
+  useEffect(() => {
+    if (selectedCategories) {
+      form.reset({ name: selectedCategories?.name });
+    }
+  }, [selectedCategories, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
