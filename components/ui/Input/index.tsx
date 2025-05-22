@@ -8,10 +8,11 @@ type PropTypes = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   className?: string;
+  accept?: string;
 };
 
 const Input = React.forwardRef<HTMLInputElement, PropTypes>(
-  ({ type, name, value, onChange, placeholder, className }, ref) => {
+  ({ type, name, value, onChange, placeholder, className, accept }, ref) => {
     return (
       <BaseInput
         ref={ref}
@@ -21,6 +22,7 @@ const Input = React.forwardRef<HTMLInputElement, PropTypes>(
         onChange={onChange}
         placeholder={placeholder}
         className={className}
+        accept={accept}
       />
     );
   }

@@ -56,7 +56,7 @@ export default function Navbar() {
                 role={role}
                 roles={accessCategories.lihat}
               >
-                categories
+                Categories
               </NavLink>
             )}
             {isHasAccess(accessTalents.lihat) && (

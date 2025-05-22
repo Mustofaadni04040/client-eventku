@@ -89,7 +89,7 @@ export default function TalentsPage() {
 
           {isHasAccess(accessTalents.tambah, role) && (
             <Button type="button" classname="bg-primary hover:bg-primary/90">
-              <Link href="/categories/create">Tambah</Link>
+              <Link href="/talents/create">Tambah</Link>
             </Button>
           )}
         </div>
