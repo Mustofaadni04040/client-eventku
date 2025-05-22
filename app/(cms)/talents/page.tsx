@@ -16,25 +16,32 @@ import Link from "next/link";
 import { getData } from "@/utils/fetch";
 import debounce from "debounce-promise";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useSelector } from "react-redux";
-import { accessCategories } from "@/utils/access";
+import { useDispatch, useSelector } from "react-redux";
+import { accessTalents } from "@/utils/access";
 import ModalUpdateCategories from "@/components/fragments/ModalUpdateCategories";
 import ModalDeleteCategories from "@/components/fragments/ModalDeleteCategories";
 import { isHasAccess } from "@/utils/hasAccess";
+import Input from "@/components/ui/Input/index";
+import { setKeyword } from "@/redux/keyword/keywordSlice";
+import Image from "next/image";
+import { config } from "@/configs";
 
 type PropTypes = {
   _id: string;
   name: string;
+  image: { name: string; _id: string };
 };
 
 type TypeModal = "edit" | "delete" | null;
 
-export default function CategoriesPage() {
+export default function TalentsPage() {
   const [data, setData] = useState<PropTypes[]>([]);
   const debouncedGetData = useMemo(() => debounce(getData, 1000), []);
   const [loading, setLoading] = useState<boolean>(false);
   const [skeletonCount, setSkeletonCount] = useState<number>(5);
   const role = useSelector((state: any) => state.auth.role);
+  const { keyword } = useSelector((state: any) => state.keyword);
+  const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<TypeModal>(null);
   const [selectedCategories, setSelectedCategories] = useState<{
@@ -47,7 +54,12 @@ export default function CategoriesPage() {
     const getCategoriesAPI = async () => {
       setLoading(true);
       try {
-        const response = await debouncedGetData(`/cms/categories`, null, token);
+        const response = await debouncedGetData(
+          `/cms/talents`,
+          { keyword },
+          token
+        );
+
         setData(response?.data?.data);
         setSkeletonCount(response?.data?.data?.length);
       } catch (error) {
@@ -58,15 +70,24 @@ export default function CategoriesPage() {
     };
 
     getCategoriesAPI();
-  }, [debouncedGetData]);
+  }, [debouncedGetData, keyword]);
 
   return (
     <div className="max-w-7xl mx-auto my-10">
-      <Breadcrumbs textSecond="categories" />
+      <Breadcrumbs textSecond="talents" />
 
-      <div className="my-5">
-        <div className="w-full flex justify-end">
-          {isHasAccess(accessCategories.tambah, role) && (
+      <div className="mb-5 mt-10">
+        <div className="w-full flex justify-between items-center">
+          <Input
+            type="text"
+            name="query"
+            value={keyword}
+            placeholder="Cari berdasarkan nama talents"
+            className="w-[300px]"
+            onChange={(e) => dispatch(setKeyword(e.target.value))}
+          />
+
+          {isHasAccess(accessTalents.tambah, role) && (
             <Button type="button" classname="bg-primary hover:bg-primary/90">
               <Link href="/categories/create">Tambah</Link>
             </Button>
@@ -80,6 +101,7 @@ export default function CategoriesPage() {
               <TableHead className="w-[100px]">No</TableHead>
               <TableHead></TableHead>
               <TableHead>Name</TableHead>
+              <TableHead>Profile Photo</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -94,21 +116,44 @@ export default function CategoriesPage() {
                     <TableCell>
                       <Skeleton className="h-4 w-[200px]" />
                     </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-[200px]" />
+                    </TableCell>
                     <TableCell className="text-right flex justify-end">
                       <Skeleton className="h-4 w-[50px]" />
                     </TableCell>
                   </TableRow>
                 ))
               : data?.map(
-                  (item: { _id: string; name: string }, index: number) => (
+                  (
+                    item: {
+                      _id: string;
+                      name: string;
+                      image: { name: string; _id: string };
+                    },
+                    index: number
+                  ) => (
                     <TableRow key={`${item?._id}${index}`}>
                       <TableCell className="font-medium">{index + 1}</TableCell>
                       <TableCell></TableCell>
                       <TableCell>{item?.name}</TableCell>
+                      <TableCell>
+                        <Image
+                          src={
+                            item?.image?.name
+                              ? `${config.api_image}/${item?.image?.name}`
+                              : "/default.jpeg"
+                          }
+                          width={50}
+                          height={50}
+                          alt={`${item?.name} profile`}
+                          className="rounded-full w-14 h-14 object-cover"
+                        />
+                      </TableCell>
                       <TableCell className="text-right flex justify-end">
                         <div className="flex items-center gap-3">
                           {isHasAccess(
-                            accessCategories.edit || accessCategories.hapus,
+                            accessTalents.edit || accessTalents.hapus,
                             role
                           ) && (
                             <>

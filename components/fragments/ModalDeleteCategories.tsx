@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Modal from "../layout/modalLayout";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import Button from "../ui/Button/index";
-import { deleteData, putData } from "@/utils/fetch";
+import { deleteData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
 
 type PropTypes = {
@@ -65,12 +65,14 @@ export default function ModalDeleteCategories({
     <Modal
       openModal={openModal}
       setOpenModal={setOpenModal}
-      title="Delete Categories"
+      title="Apakah kamu yakin?"
     >
       <div>
         <p>
-          Apakah anda yakin ingin menghapus kategori{" "}
-          <b>{selectedCategories?.name}</b>
+          Kamu yakin ingin menghapus kategori <b>{selectedCategories?.name}</b>?
+          <span className="text-red-500 text-[13px] block">
+            Kategori yang terhapus tidak dapat dikembalikan*
+          </span>
         </p>
       </div>
       <DialogFooter className="sm:justify-end mt-5">

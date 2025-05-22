@@ -4,7 +4,7 @@ import { Input as BaseInput } from "@/components/ui/input";
 type PropTypes = {
   type: string;
   name: string;
-  value: string;
+  value: any;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   className?: string;

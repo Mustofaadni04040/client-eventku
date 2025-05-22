@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import FormInput from "@/components/ui/FormField";
 import AuthLayout from "@/components/layout/authLayout";
 import { postData } from "@/utils/fetch";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setRole, setToken } from "@/redux/auth/authSlice";
 
 const formSchema = z.object({
@@ -55,7 +55,6 @@ export default function SigninPage() {
         dispatch(setToken(response?.data?.data?.token));
         dispatch(setRole(response?.data?.data?.role));
 
-        console.log(response);
         router.push("/dashboard");
         setToaster({
           variant: "success",

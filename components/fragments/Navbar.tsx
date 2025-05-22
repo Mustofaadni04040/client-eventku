@@ -13,6 +13,8 @@ import {
   accessTalents,
 } from "@/utils/access";
 import Button from "../ui/Button/index";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { PopoverClose } from "@radix-ui/react-popover";
 
 export default function Navbar() {
   const { role, token } = useSelector((state: any) => state.auth);
@@ -34,8 +36,8 @@ export default function Navbar() {
       <div className="max-w-7xl h-full container flex items-center justify-between mx-auto">
         <Image
           src={"/EventKu.svg"}
-          width={100}
-          height={50}
+          width={0}
+          height={0}
           alt="logo"
           className="w-[100px] h-auto"
           priority
@@ -105,22 +107,37 @@ export default function Navbar() {
             )}
           </nav>
 
-          {token ? (
-            <Button
-              type="button"
-              classname="bg-transparent border border-primary text-primary hover:bg-slate-100"
-              onClick={handleSignOut}
-            >
-              Sign Out
-            </Button>
-          ) : (
-            <Button
-              type="button"
-              classname="bg-transparent border border-primary text-primary hover:bg-slate-100"
-            >
-              Sign In
-            </Button>
-          )}
+          <Popover>
+            <PopoverTrigger>
+              <Image
+                src="/default.jpeg"
+                width={50}
+                height={50}
+                alt="profile"
+                className="rounded-full w-8 h-auto object-cover"
+              />
+            </PopoverTrigger>
+            <PopoverContent className="w-fit p-0">
+              <PopoverClose asChild>
+                {token ? (
+                  <Button
+                    type="button"
+                    classname="bg-transparent border text-primary hover:bg-slate-100"
+                    onClick={handleSignOut}
+                  >
+                    Sign Out
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    classname="bg-transparent border border-primary text-primary hover:bg-slate-100"
+                  >
+                    Sign In
+                  </Button>
+                )}
+              </PopoverClose>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
     </div>

@@ -11,8 +11,6 @@ import { ToasterContext } from "@/context/ToasterContext";
 import Breadcrumbs from "@/components/fragments/Breadcrumb";
 import { useRouter } from "next/navigation";
 import { postData } from "@/utils/fetch";
-import axios from "axios";
-import { config } from "@/configs";
 
 const formSchema = z.object({
   name: z.string().min(6, {

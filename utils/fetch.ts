@@ -1,11 +1,7 @@
 import axios from "axios";
 import { config } from "../configs";
 
-export async function getData(
-  url: string,
-  params?: Record<string, any>,
-  token?: string
-) {
+export async function getData(url: string, params?: any, token?: string) {
   return await axios.get(`${config.api_host_dev}${url}`, {
     params,
     headers: {
