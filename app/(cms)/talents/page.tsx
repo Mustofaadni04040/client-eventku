@@ -18,17 +18,18 @@ import debounce from "debounce-promise";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDispatch, useSelector } from "react-redux";
 import { accessTalents } from "@/utils/access";
-import ModalUpdateCategories from "@/components/fragments/ModalUpdateCategories";
 import ModalDeleteCategories from "@/components/fragments/ModalDeleteCategories";
 import { isHasAccess } from "@/utils/hasAccess";
 import Input from "@/components/ui/Input/index";
 import { setKeyword } from "@/redux/keyword/keywordSlice";
 import Image from "next/image";
 import { config } from "@/configs";
+import ModalUpdateTalent from "@/components/fragments/ModalUpdateTalent";
 
 type PropTypes = {
   _id: string;
   name: string;
+  role: string;
   image: { name: string; _id: string };
 };
 
@@ -44,9 +45,11 @@ export default function TalentsPage() {
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<TypeModal>(null);
-  const [selectedCategories, setSelectedCategories] = useState<{
+  const [selectedTalent, setSelectedTalent] = useState<{
     _id: string;
     name: string;
+    role: string;
+    image: { name: string; _id: string };
   } | null>(null);
 
   useEffect(() => {
@@ -101,6 +104,7 @@ export default function TalentsPage() {
               <TableHead className="w-[100px]">No</TableHead>
               <TableHead></TableHead>
               <TableHead>Name</TableHead>
+              <TableHead>Role</TableHead>
               <TableHead>Profile Photo</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
@@ -119,6 +123,9 @@ export default function TalentsPage() {
                     <TableCell>
                       <Skeleton className="h-4 w-[200px]" />
                     </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-[200px]" />
+                    </TableCell>
                     <TableCell className="text-right flex justify-end">
                       <Skeleton className="h-4 w-[50px]" />
                     </TableCell>
@@ -129,6 +136,7 @@ export default function TalentsPage() {
                     item: {
                       _id: string;
                       name: string;
+                      role: string;
                       image: { name: string; _id: string };
                     },
                     index: number
@@ -137,6 +145,7 @@ export default function TalentsPage() {
                       <TableCell className="font-medium">{index + 1}</TableCell>
                       <TableCell></TableCell>
                       <TableCell>{item?.name}</TableCell>
+                      <TableCell>{item?.role}</TableCell>
                       <TableCell>
                         <Image
                           src={
@@ -163,7 +172,7 @@ export default function TalentsPage() {
                                 onClick={() => {
                                   setOpenModal(!openModal);
                                   setModalType("edit");
-                                  setSelectedCategories(item);
+                                  setSelectedTalent(item);
                                 }}
                               >
                                 Edit
@@ -174,7 +183,7 @@ export default function TalentsPage() {
                                 onClick={() => {
                                   setOpenModal(!openModal);
                                   setModalType("delete");
-                                  setSelectedCategories(item);
+                                  setSelectedTalent(item);
                                 }}
                               >
                                 Delete
@@ -191,27 +200,27 @@ export default function TalentsPage() {
       </div>
 
       {modalType === "edit" && (
-        <ModalUpdateCategories
+        <ModalUpdateTalent
           loading={loading}
           setLoading={setLoading}
           openModal={openModal}
           setOpenModal={setOpenModal}
-          selectedCategories={selectedCategories}
+          selectedTalent={selectedTalent}
           setData={setData}
         />
       )}
 
-      {modalType === "delete" && (
+      {/* {modalType === "delete" && (
         <ModalDeleteCategories
           loading={loading}
           setLoading={setLoading}
           openModal={openModal}
           setOpenModal={setOpenModal}
-          selectedCategories={selectedCategories}
+          selectedTalent={selectedTalent}
           setData={setData}
           data={data}
         />
-      )}
+      )} */}
     </div>
   );
 }
