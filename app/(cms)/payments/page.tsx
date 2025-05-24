@@ -21,6 +21,7 @@ import { accessTalents } from "@/utils/access";
 import { isHasAccess } from "@/utils/hasAccess";
 import Image from "next/image";
 import { config } from "@/configs";
+import ModalUpdatePayment from "@/components/fragments/ModalUpdatePayment";
 
 type PropTypes = {
   _id: string;
@@ -39,7 +40,7 @@ export default function PaymentsPage() {
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<TypeModal>(null);
-  const [selectedTalent, setSelectedTalent] = useState<{
+  const [selectedPayment, setSelectedPayment] = useState<{
     _id: string;
     type: string;
     image: { name: string; _id: string };
@@ -151,7 +152,7 @@ export default function PaymentsPage() {
                                 onClick={() => {
                                   setOpenModal(!openModal);
                                   setModalType("edit");
-                                  setSelectedTalent(item);
+                                  setSelectedPayment(item);
                                 }}
                               >
                                 Edit
@@ -162,7 +163,7 @@ export default function PaymentsPage() {
                                 onClick={() => {
                                   setOpenModal(!openModal);
                                   setModalType("delete");
-                                  setSelectedTalent(item);
+                                  setSelectedPayment(item);
                                 }}
                               >
                                 Delete
@@ -177,6 +178,17 @@ export default function PaymentsPage() {
           </TableBody>
         </Table>
       </div>
+
+      {modalType === "edit" && (
+        <ModalUpdatePayment
+          loading={loading}
+          setLoading={setLoading}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          selectedPayment={selectedPayment}
+          setData={setData}
+        />
+      )}
     </div>
   );
 }
