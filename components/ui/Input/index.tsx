@@ -23,6 +23,7 @@ const Input = React.forwardRef<HTMLInputElement, PropTypes>(
         placeholder={placeholder}
         className={className}
         accept={accept}
+        id={name}
       />
     );
   }

@@ -18,13 +18,13 @@ import debounce from "debounce-promise";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDispatch, useSelector } from "react-redux";
 import { accessTalents } from "@/utils/access";
-import ModalDeleteCategories from "@/components/fragments/ModalDeleteCategories";
 import { isHasAccess } from "@/utils/hasAccess";
 import Input from "@/components/ui/Input/index";
 import { setKeyword } from "@/redux/keyword/keywordSlice";
 import Image from "next/image";
 import { config } from "@/configs";
 import ModalUpdateTalent from "@/components/fragments/ModalUpdateTalent";
+import ModalDeleteTalent from "@/components/fragments/ModalDeleteTalent";
 
 type PropTypes = {
   _id: string;
@@ -210,8 +210,8 @@ export default function TalentsPage() {
         />
       )}
 
-      {/* {modalType === "delete" && (
-        <ModalDeleteCategories
+      {modalType === "delete" && (
+        <ModalDeleteTalent
           loading={loading}
           setLoading={setLoading}
           openModal={openModal}
@@ -220,7 +220,7 @@ export default function TalentsPage() {
           setData={setData}
           data={data}
         />
-      )} */}
+      )}
     </div>
   );
 }
