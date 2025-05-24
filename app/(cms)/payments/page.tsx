@@ -22,6 +22,7 @@ import { isHasAccess } from "@/utils/hasAccess";
 import Image from "next/image";
 import { config } from "@/configs";
 import ModalUpdatePayment from "@/components/fragments/ModalUpdatePayment";
+import ModalDeletePayment from "@/components/fragments/ModalDeletePayment";
 
 type PropTypes = {
   _id: string;
@@ -187,6 +188,18 @@ export default function PaymentsPage() {
           setOpenModal={setOpenModal}
           selectedPayment={selectedPayment}
           setData={setData}
+        />
+      )}
+
+      {modalType === "delete" && (
+        <ModalDeletePayment
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          loading={loading}
+          setLoading={setLoading}
+          selectedPayment={selectedPayment}
+          setData={setData}
+          data={data}
         />
       )}
     </div>
