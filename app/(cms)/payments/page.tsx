@@ -76,7 +76,7 @@ export default function PaymentsPage() {
         <div className="w-full flex justify-end">
           {isHasAccess(accessTalents.tambah, role) && (
             <Button type="button" classname="bg-primary hover:bg-primary/90">
-              <Link href="/talents/create">Tambah</Link>
+              <Link href="/payments/create">Tambah</Link>
             </Button>
           )}
         </div>
@@ -135,6 +135,7 @@ export default function PaymentsPage() {
                           height={50}
                           alt={`${item?.type} profile`}
                           className="w-14 h-auto object-cover"
+                          priority
                         />
                       </TableCell>
                       <TableCell className="text-right flex justify-end">
