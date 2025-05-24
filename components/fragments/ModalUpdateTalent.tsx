@@ -7,8 +7,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "../ui/form";
-import { postData, putData } from "@/utils/fetch";
+import { putData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
+import { uploadImage } from "@/utils/uploadImage";
 
 const formSchema = z.object({
   name: z.string().min(6, {
@@ -68,13 +69,6 @@ export default function ModalUpdateTalent({
     }
   }, [selectedTalent, form]);
 
-  const uploadImage = async (file: File) => {
-    const formData = new FormData();
-    formData.append("avatar", file);
-
-    return await postData("/cms/images", formData, "multipart", token);
-  };
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
 
@@ -92,7 +86,7 @@ export default function ModalUpdateTalent({
         return;
       }
 
-      const imageRes = await uploadImage(file);
+      const imageRes = await uploadImage(file, token, "/cms/images", "avatar");
       const imageId = imageRes?.data?.data?._id;
       const imageName = imageRes?.data?.data?.name;
 

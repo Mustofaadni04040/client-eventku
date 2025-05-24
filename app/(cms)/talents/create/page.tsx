@@ -11,6 +11,7 @@ import { ToasterContext } from "@/context/ToasterContext";
 import Breadcrumbs from "@/components/fragments/Breadcrumb";
 import { useRouter } from "next/navigation";
 import { postData } from "@/utils/fetch";
+import { uploadImage } from "@/utils/uploadImage";
 
 const formSchema = z.object({
   name: z.string().min(6, {
@@ -44,13 +45,6 @@ export default function CreateTalentsPage() {
     },
   });
 
-  const uploadImage = async (file: File) => {
-    const formData = new FormData();
-    formData.append("avatar", file);
-
-    return await postData("/cms/images", formData, "multipart", token);
-  };
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
     try {
@@ -66,7 +60,7 @@ export default function CreateTalentsPage() {
         return;
       }
 
-      const imageRes = await uploadImage(file);
+      const imageRes = await uploadImage(file, token, "/cms/images", "avatar");
       const imageId = imageRes?.data?.data?._id;
 
       const payload = {
