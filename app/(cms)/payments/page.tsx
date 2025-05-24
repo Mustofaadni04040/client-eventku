@@ -19,36 +19,29 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useDispatch, useSelector } from "react-redux";
 import { accessTalents } from "@/utils/access";
 import { isHasAccess } from "@/utils/hasAccess";
-import Input from "@/components/ui/Input/index";
-import { setKeyword } from "@/redux/keyword/keywordSlice";
 import Image from "next/image";
 import { config } from "@/configs";
-import ModalUpdateTalent from "@/components/fragments/ModalUpdateTalent";
-import ModalDeleteTalent from "@/components/fragments/ModalDeleteTalent";
 
 type PropTypes = {
   _id: string;
-  name: string;
-  role: string;
+  type: string;
   image: { name: string; _id: string };
 };
 
 type TypeModal = "edit" | "delete" | null;
 
-export default function TalentsPage() {
+export default function PaymentsPage() {
   const [data, setData] = useState<PropTypes[]>([]);
   const debouncedGetData = useMemo(() => debounce(getData, 1000), []);
   const [loading, setLoading] = useState<boolean>(false);
   const [skeletonCount, setSkeletonCount] = useState<number>(5);
   const role = useSelector((state: any) => state.auth.role);
-  const { keyword } = useSelector((state: any) => state.keyword);
   const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<TypeModal>(null);
   const [selectedTalent, setSelectedTalent] = useState<{
     _id: string;
-    name: string;
-    role: string;
+    type: string;
     image: { name: string; _id: string };
   } | null>(null);
 
@@ -58,8 +51,8 @@ export default function TalentsPage() {
       setLoading(true);
       try {
         const response = await debouncedGetData(
-          `/cms/talents`,
-          { keyword },
+          `/cms/payments`,
+          undefined,
           token
         );
 
@@ -73,23 +66,14 @@ export default function TalentsPage() {
     };
 
     getCategoriesAPI();
-  }, [debouncedGetData, keyword]);
+  }, [debouncedGetData]);
 
   return (
     <div className="max-w-7xl mx-auto my-10">
-      <Breadcrumbs textSecond="talents" />
+      <Breadcrumbs textSecond="payments" />
 
       <div className="mb-5 mt-10">
-        <div className="w-full flex justify-between items-center">
-          <Input
-            type="text"
-            name="query"
-            value={keyword}
-            placeholder="Cari berdasarkan nama talents"
-            className="w-[300px]"
-            onChange={(e) => dispatch(setKeyword(e.target.value))}
-          />
-
+        <div className="w-full flex justify-end">
           {isHasAccess(accessTalents.tambah, role) && (
             <Button type="button" classname="bg-primary hover:bg-primary/90">
               <Link href="/talents/create">Tambah</Link>
@@ -98,14 +82,13 @@ export default function TalentsPage() {
         </div>
 
         <Table className="my-5">
-          <TableCaption>A list of talents event.</TableCaption>
+          <TableCaption>A list of payments method.</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">No</TableHead>
               <TableHead></TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Profile Photo</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Image</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -123,9 +106,6 @@ export default function TalentsPage() {
                     <TableCell>
                       <Skeleton className="h-4 w-[200px]" />
                     </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-4 w-[200px]" />
-                    </TableCell>
                     <TableCell className="text-right flex justify-end">
                       <Skeleton className="h-4 w-[50px]" />
                     </TableCell>
@@ -135,8 +115,7 @@ export default function TalentsPage() {
                   (
                     item: {
                       _id: string;
-                      name: string;
-                      role: string;
+                      type: string;
                       image: { name: string; _id: string };
                     },
                     index: number
@@ -144,8 +123,7 @@ export default function TalentsPage() {
                     <TableRow key={`${item?._id}${index}`}>
                       <TableCell className="font-medium">{index + 1}</TableCell>
                       <TableCell></TableCell>
-                      <TableCell>{item?.name}</TableCell>
-                      <TableCell>{item?.role}</TableCell>
+                      <TableCell>{item?.type}</TableCell>
                       <TableCell>
                         <Image
                           src={
@@ -155,8 +133,8 @@ export default function TalentsPage() {
                           }
                           width={50}
                           height={50}
-                          alt={`${item?.name} profile`}
-                          className="rounded-full w-14 h-14 object-cover"
+                          alt={`${item?.type} profile`}
+                          className="w-14 h-auto object-cover"
                         />
                       </TableCell>
                       <TableCell className="text-right flex justify-end">
@@ -198,29 +176,6 @@ export default function TalentsPage() {
           </TableBody>
         </Table>
       </div>
-
-      {modalType === "edit" && (
-        <ModalUpdateTalent
-          loading={loading}
-          setLoading={setLoading}
-          openModal={openModal}
-          setOpenModal={setOpenModal}
-          selectedTalent={selectedTalent}
-          setData={setData}
-        />
-      )}
-
-      {modalType === "delete" && (
-        <ModalDeleteTalent
-          loading={loading}
-          setLoading={setLoading}
-          openModal={openModal}
-          setOpenModal={setOpenModal}
-          selectedTalent={selectedTalent}
-          setData={setData}
-          data={data}
-        />
-      )}
     </div>
   );
 }
