@@ -11,23 +11,7 @@ import { putData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
 import { uploadImage } from "@/utils/uploadImage";
 import { ModalTalents } from "@/types/modalTalents.type";
-
-const formSchema = z.object({
-  name: z.string().min(6, {
-    message: "Nama kategori harus lebih dari 6 karakter.",
-  }),
-  role: z.string().min(4, {
-    message: "Role talent harus lebih dari 4 karakter.",
-  }),
-  image: z
-    .any()
-    .refine((file) => file?.length === 1, {
-      message: "Wajib upload satu file.",
-    })
-    .refine((file) => file?.[0]?.type?.startsWith("image/"), {
-      message: "File harus berupa gambar.",
-    }),
-});
+import { talentFormSchema } from "@/utils/formSchema";
 
 export default function ModalUpdateTalent({
   openModal,
@@ -40,8 +24,8 @@ export default function ModalUpdateTalent({
   const { setToaster } = useContext(ToasterContext);
   const [error, setError] = useState<string>("");
   const token = JSON.parse(localStorage.getItem("token") || "");
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof talentFormSchema>>({
+    resolver: zodResolver(talentFormSchema),
     defaultValues: {
       name: selectedTalent?.name,
       role: selectedTalent?.role,
@@ -56,7 +40,7 @@ export default function ModalUpdateTalent({
     }
   }, [selectedTalent, form]);
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof talentFormSchema>) {
     setLoading(true);
 
     try {

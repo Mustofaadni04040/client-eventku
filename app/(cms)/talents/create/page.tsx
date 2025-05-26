@@ -12,23 +12,7 @@ import Breadcrumbs from "@/components/fragments/Breadcrumb";
 import { useRouter } from "next/navigation";
 import { postData } from "@/utils/fetch";
 import { uploadImage } from "@/utils/uploadImage";
-
-const formSchema = z.object({
-  name: z.string().min(6, {
-    message: "Nama talent harus lebih dari 6 karakter.",
-  }),
-  role: z.string().min(4, {
-    message: "Role talent harus lebih dari 4 karakter.",
-  }),
-  image: z
-    .any()
-    .refine((file) => file?.length === 1, {
-      message: "Wajib upload satu file.",
-    })
-    .refine((file) => file?.[0]?.type?.startsWith("image/"), {
-      message: "File harus berupa gambar.",
-    }),
-});
+import { talentFormSchema } from "@/utils/formSchema";
 
 export default function CreateTalentsPage() {
   const { setToaster } = useContext(ToasterContext);
@@ -36,8 +20,8 @@ export default function CreateTalentsPage() {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const token = JSON.parse(localStorage.getItem("token") || "");
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof talentFormSchema>>({
+    resolver: zodResolver(talentFormSchema),
     defaultValues: {
       name: "",
       role: "",
@@ -45,7 +29,7 @@ export default function CreateTalentsPage() {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof talentFormSchema>) => {
     setLoading(true);
     try {
       const file = values.image[0];
