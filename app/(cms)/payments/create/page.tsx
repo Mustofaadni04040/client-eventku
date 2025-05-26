@@ -12,20 +12,7 @@ import Breadcrumbs from "@/components/fragments/Breadcrumb";
 import { useRouter } from "next/navigation";
 import { postData } from "@/utils/fetch";
 import { uploadImage } from "@/utils/uploadImage";
-
-const formSchema = z.object({
-  type: z.string().min(2, {
-    message: "Type pembayaran harus lebih dari 2 karakter.",
-  }),
-  image: z
-    .any()
-    .refine((file) => file?.length === 1, {
-      message: "Wajib upload satu file.",
-    })
-    .refine((file) => file?.[0]?.type?.startsWith("image/"), {
-      message: "File harus berupa gambar.",
-    }),
-});
+import { PaymentFormSchema } from "@/utils/formSchema";
 
 export default function CreateTalentsPage() {
   const { setToaster } = useContext(ToasterContext);
@@ -33,15 +20,15 @@ export default function CreateTalentsPage() {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const token = JSON.parse(localStorage.getItem("token") || "");
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof PaymentFormSchema>>({
+    resolver: zodResolver(PaymentFormSchema),
     defaultValues: {
       type: "",
       image: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof PaymentFormSchema>) => {
     setLoading(true);
     try {
       const file = values.image[0];

@@ -17,4 +17,19 @@ export const talentFormSchema = z.object({
     }),
 });
 
+export const PaymentFormSchema = z.object({
+  type: z.string().min(2, {
+    message: "Type pembayaran harus lebih dari 2 karakter.",
+  }),
+  image: z
+    .any()
+    .refine((file) => file?.length === 1, {
+      message: "Wajib upload satu file.",
+    })
+    .refine((file) => file?.[0]?.type?.startsWith("image/"), {
+      message: "File harus berupa gambar.",
+    }),
+});
+
 export type TalentFormSchema = z.infer<typeof talentFormSchema>;
+export type PaymentFormSchema = z.infer<typeof PaymentFormSchema>;

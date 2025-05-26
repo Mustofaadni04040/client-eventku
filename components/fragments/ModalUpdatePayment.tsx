@@ -11,20 +11,7 @@ import { putData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
 import { uploadImage } from "@/utils/uploadImage";
 import { ModalPayments } from "@/types/modalPayments.type";
-
-const formSchema = z.object({
-  type: z.string().min(2, {
-    message: "Type pembayaran harus lebih dari 2 karakter.",
-  }),
-  image: z
-    .any()
-    .refine((file) => file?.length === 1, {
-      message: "Wajib upload satu file.",
-    })
-    .refine((file) => file?.[0]?.type?.startsWith("image/"), {
-      message: "File harus berupa gambar.",
-    }),
-});
+import { PaymentFormSchema } from "@/utils/formSchema";
 
 export default function ModalUpdatePayment({
   openModal,
@@ -37,8 +24,8 @@ export default function ModalUpdatePayment({
   const { setToaster } = useContext(ToasterContext);
   const [error, setError] = useState<string>("");
   const token = JSON.parse(localStorage.getItem("token") || "");
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof PaymentFormSchema>>({
+    resolver: zodResolver(PaymentFormSchema),
     defaultValues: {
       type: selectedPayment?.type,
       image: "",
@@ -52,7 +39,7 @@ export default function ModalUpdatePayment({
     }
   }, [selectedPayment, form]);
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof PaymentFormSchema>) {
     setLoading(true);
 
     try {
