@@ -9,21 +9,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "../ui/form";
 import { putData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
+import { ModalCategories } from "@/types/modalCategories.type";
 
 const formSchema = z.object({
   name: z.string().min(6, {
     message: "Nama kategori harus lebih dari 6 karakter.",
   }),
 });
-
-type PropTypes = {
-  openModal: boolean;
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedCategories: { _id: string; name: string } | null;
-  setData: React.Dispatch<React.SetStateAction<any>>;
-};
 
 export default function ModalUpdateCategories({
   openModal,
@@ -32,7 +24,7 @@ export default function ModalUpdateCategories({
   setLoading,
   selectedCategories,
   setData,
-}: PropTypes) {
+}: ModalCategories) {
   const { setToaster } = useContext(ToasterContext);
   const [error, setError] = useState<string>("");
   const form = useForm<z.infer<typeof formSchema>>({

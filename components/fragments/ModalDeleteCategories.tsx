@@ -4,16 +4,7 @@ import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import Button from "../ui/Button/index";
 import { deleteData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
-
-type PropTypes = {
-  openModal: boolean;
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedCategories: { _id: string; name: string } | null;
-  setData: React.Dispatch<React.SetStateAction<any>>;
-  data: { _id: string; name: string }[];
-};
+import { ModalCategories } from "@/types/modalCategories.type";
 
 export default function ModalDeleteCategories({
   openModal,
@@ -23,7 +14,7 @@ export default function ModalDeleteCategories({
   selectedCategories,
   setData,
   data,
-}: PropTypes) {
+}: ModalCategories) {
   const { setToaster } = useContext(ToasterContext);
 
   async function onSubmit() {
@@ -39,10 +30,11 @@ export default function ModalDeleteCategories({
       if (res?.status === 200) {
         setOpenModal(false);
         setData(
-          data.filter(
-            (item: { _id: string; name: string }) =>
-              item._id !== selectedCategories?._id
-          )
+          data &&
+            data.filter(
+              (item: { _id: string; name: string }) =>
+                item._id !== selectedCategories?._id
+            )
         );
         setToaster({
           variant: "success",
