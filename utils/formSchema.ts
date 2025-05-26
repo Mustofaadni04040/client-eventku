@@ -17,7 +17,7 @@ export const talentFormSchema = z.object({
     }),
 });
 
-export const PaymentFormSchema = z.object({
+export const paymentFormSchema = z.object({
   type: z.string().min(2, {
     message: "Type pembayaran harus lebih dari 2 karakter.",
   }),
@@ -31,5 +31,12 @@ export const PaymentFormSchema = z.object({
     }),
 });
 
+export const categoryFormSchema = z.object({
+  name: z.string().min(6, {
+    message: "Nama kategori harus lebih dari 6 karakter.",
+  }),
+});
+
 export type TalentFormSchema = z.infer<typeof talentFormSchema>;
-export type PaymentFormSchema = z.infer<typeof PaymentFormSchema>;
+export type paymentFormSchema = z.infer<typeof paymentFormSchema>;
+export type categoryFormSchema = z.infer<typeof categoryFormSchema>;

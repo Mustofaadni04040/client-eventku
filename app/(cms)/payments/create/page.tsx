@@ -12,7 +12,7 @@ import Breadcrumbs from "@/components/fragments/Breadcrumb";
 import { useRouter } from "next/navigation";
 import { postData } from "@/utils/fetch";
 import { uploadImage } from "@/utils/uploadImage";
-import { PaymentFormSchema } from "@/utils/formSchema";
+import { paymentFormSchema } from "@/utils/formSchema";
 
 export default function CreateTalentsPage() {
   const { setToaster } = useContext(ToasterContext);
@@ -20,15 +20,15 @@ export default function CreateTalentsPage() {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const token = JSON.parse(localStorage.getItem("token") || "");
-  const form = useForm<z.infer<typeof PaymentFormSchema>>({
-    resolver: zodResolver(PaymentFormSchema),
+  const form = useForm<z.infer<typeof paymentFormSchema>>({
+    resolver: zodResolver(paymentFormSchema),
     defaultValues: {
       type: "",
       image: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof PaymentFormSchema>) => {
+  const onSubmit = async (values: z.infer<typeof paymentFormSchema>) => {
     setLoading(true);
     try {
       const file = values.image[0];

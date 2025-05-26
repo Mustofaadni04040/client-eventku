@@ -11,7 +11,7 @@ import { putData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
 import { uploadImage } from "@/utils/uploadImage";
 import { ModalPayments } from "@/types/modalPayments.type";
-import { PaymentFormSchema } from "@/utils/formSchema";
+import { paymentFormSchema } from "@/utils/formSchema";
 
 export default function ModalUpdatePayment({
   openModal,
@@ -24,8 +24,8 @@ export default function ModalUpdatePayment({
   const { setToaster } = useContext(ToasterContext);
   const [error, setError] = useState<string>("");
   const token = JSON.parse(localStorage.getItem("token") || "");
-  const form = useForm<z.infer<typeof PaymentFormSchema>>({
-    resolver: zodResolver(PaymentFormSchema),
+  const form = useForm<z.infer<typeof paymentFormSchema>>({
+    resolver: zodResolver(paymentFormSchema),
     defaultValues: {
       type: selectedPayment?.type,
       image: "",
@@ -39,7 +39,7 @@ export default function ModalUpdatePayment({
     }
   }, [selectedPayment, form]);
 
-  async function onSubmit(values: z.infer<typeof PaymentFormSchema>) {
+  async function onSubmit(values: z.infer<typeof paymentFormSchema>) {
     setLoading(true);
 
     try {

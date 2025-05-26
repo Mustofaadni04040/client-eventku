@@ -10,12 +10,7 @@ import { Form } from "../ui/form";
 import { putData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
 import { ModalCategories } from "@/types/modalCategories.type";
-
-const formSchema = z.object({
-  name: z.string().min(6, {
-    message: "Nama kategori harus lebih dari 6 karakter.",
-  }),
-});
+import { categoryFormSchema } from "@/utils/formSchema";
 
 export default function ModalUpdateCategories({
   openModal,
@@ -27,8 +22,8 @@ export default function ModalUpdateCategories({
 }: ModalCategories) {
   const { setToaster } = useContext(ToasterContext);
   const [error, setError] = useState<string>("");
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof categoryFormSchema>>({
+    resolver: zodResolver(categoryFormSchema),
     defaultValues: {
       name: selectedCategories?.name,
     },
@@ -40,7 +35,7 @@ export default function ModalUpdateCategories({
     }
   }, [selectedCategories, form]);
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof categoryFormSchema>) {
     setLoading(true);
 
     try {

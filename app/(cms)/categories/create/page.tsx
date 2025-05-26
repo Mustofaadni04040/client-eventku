@@ -11,26 +11,21 @@ import { ToasterContext } from "@/context/ToasterContext";
 import Breadcrumbs from "@/components/fragments/Breadcrumb";
 import { useRouter } from "next/navigation";
 import { postData } from "@/utils/fetch";
-
-const formSchema = z.object({
-  name: z.string().min(6, {
-    message: "Nama kategori harus lebih dari 6 karakter.",
-  }),
-});
+import { categoryFormSchema } from "@/utils/formSchema";
 
 export default function CreateCategoriesPage() {
   const { setToaster } = useContext(ToasterContext);
   const [error, setError] = useState<string>("");
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof categoryFormSchema>>({
+    resolver: zodResolver(categoryFormSchema),
     defaultValues: {
       name: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof categoryFormSchema>) {
     setLoading(true);
     try {
       const token = JSON.parse(localStorage.getItem("token") || "");
