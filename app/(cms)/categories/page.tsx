@@ -21,6 +21,7 @@ import { accessCategories } from "@/utils/access";
 import ModalUpdateCategories from "@/components/fragments/ModalUpdateCategories";
 import ModalDeleteCategories from "@/components/fragments/ModalDeleteCategories";
 import { isHasAccess } from "@/utils/hasAccess";
+import SkeletonComponent from "@/components/fragments/Skeleton";
 
 type PropTypes = {
   _id: string;
@@ -78,7 +79,7 @@ export default function CategoriesPage() {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">No</TableHead>
-              <TableHead></TableHead>
+              {loading ? null : <TableHead></TableHead>}
               <TableHead>Name</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
@@ -87,16 +88,7 @@ export default function CategoriesPage() {
             {loading
               ? Array.from({ length: skeletonCount || 5 }).map((_, index) => (
                   <TableRow key={index}>
-                    <TableCell className="font-medium">
-                      <Skeleton className="h-4 w-[50px]" />
-                    </TableCell>
-                    <TableCell></TableCell>
-                    <TableCell>
-                      <Skeleton className="h-4 w-[200px]" />
-                    </TableCell>
-                    <TableCell className="text-right flex justify-end">
-                      <Skeleton className="h-4 w-[50px]" />
-                    </TableCell>
+                    <SkeletonComponent key={index} columnsCount={3} />
                   </TableRow>
                 ))
               : data?.map(

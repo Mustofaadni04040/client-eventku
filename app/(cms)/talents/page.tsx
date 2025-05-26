@@ -25,6 +25,7 @@ import Image from "next/image";
 import { config } from "@/configs";
 import ModalUpdateTalent from "@/components/fragments/ModalUpdateTalent";
 import ModalDeleteTalent from "@/components/fragments/ModalDeleteTalent";
+import SkeletonComponent from "@/components/fragments/Skeleton";
 
 type PropTypes = {
   _id: string;
@@ -102,7 +103,7 @@ export default function TalentsPage() {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">No</TableHead>
-              <TableHead></TableHead>
+              {loading ? null : <TableHead></TableHead>}
               <TableHead>Name</TableHead>
               <TableHead>Role</TableHead>
               <TableHead>Profile Photo</TableHead>
@@ -113,22 +114,7 @@ export default function TalentsPage() {
             {loading
               ? Array.from({ length: skeletonCount || 5 }).map((_, index) => (
                   <TableRow key={index}>
-                    <TableCell className="font-medium">
-                      <Skeleton className="h-4 w-[50px]" />
-                    </TableCell>
-                    <TableCell></TableCell>
-                    <TableCell>
-                      <Skeleton className="h-4 w-[200px]" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-4 w-[200px]" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-4 w-[200px]" />
-                    </TableCell>
-                    <TableCell className="text-right flex justify-end">
-                      <Skeleton className="h-4 w-[50px]" />
-                    </TableCell>
+                    <SkeletonComponent key={index} columnsCount={5} />
                   </TableRow>
                 ))
               : data?.map(

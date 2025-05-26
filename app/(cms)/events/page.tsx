@@ -26,6 +26,7 @@ import { formatDate } from "@/utils/formatDate";
 import Input from "@/components/ui/Input/index";
 import { setKeyword } from "@/redux/keyword/keywordSlice";
 import { SelectComponent } from "@/components/ui/Select/index";
+import SkeletonComponent from "@/components/fragments/Skeleton";
 
 type TypeModal = "edit" | "delete" | null;
 
@@ -159,7 +160,7 @@ export default function EventsPage() {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">No</TableHead>
-              <TableHead></TableHead>
+              {loading ? null : <TableHead></TableHead>}
               <TableHead>Title</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Venue</TableHead>
@@ -172,28 +173,7 @@ export default function EventsPage() {
             {loading
               ? Array.from({ length: skeletonCount || 5 }).map((_, index) => (
                   <TableRow key={index}>
-                    <TableCell className="font-medium">
-                      <Skeleton className="h-4 w-[50px]" />
-                    </TableCell>
-                    <TableCell></TableCell>
-                    <TableCell>
-                      <Skeleton className="h-4 w-[200px]" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-4 w-[200px]" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-4 w-[200px]" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-4 w-[200px]" />
-                    </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-4 w-[200px]" />
-                    </TableCell>
-                    <TableCell className="text-right flex justify-end">
-                      <Skeleton className="h-4 w-[50px]" />
-                    </TableCell>
+                    <SkeletonComponent key={index} columnsCount={7} />
                   </TableRow>
                 ))
               : dataEvents?.map((item: EventType, index: number) => (
