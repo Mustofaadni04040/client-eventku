@@ -4,21 +4,7 @@ import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import Button from "../ui/Button/index";
 import { deleteData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
-
-type PropTypes = {
-  openModal: boolean;
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedTalent: {
-    _id: string;
-    name: string;
-    role: string;
-    image: { name: string; _id: string };
-  } | null;
-  setData: React.Dispatch<React.SetStateAction<any>>;
-  data: { _id: string; name: string }[];
-};
+import { ModalTalents } from "@/types/modalTalents.type";
 
 export default function ModalDeleteTalent({
   openModal,
@@ -28,7 +14,7 @@ export default function ModalDeleteTalent({
   selectedTalent,
   setData,
   data,
-}: PropTypes) {
+}: ModalTalents) {
   const { setToaster } = useContext(ToasterContext);
 
   async function onSubmit() {
@@ -44,10 +30,11 @@ export default function ModalDeleteTalent({
       if (res?.status === 200) {
         setOpenModal(false);
         setData(
-          data.filter(
-            (item: { _id: string; name: string }) =>
-              item._id !== selectedTalent?._id
-          )
+          data &&
+            data.filter(
+              (item: { _id: string; name: string }) =>
+                item._id !== selectedTalent?._id
+            )
         );
         setToaster({
           variant: "success",

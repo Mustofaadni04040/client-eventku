@@ -10,6 +10,7 @@ import { Form } from "../ui/form";
 import { putData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
 import { uploadImage } from "@/utils/uploadImage";
+import { ModalTalents } from "@/types/modalTalents.type";
 
 const formSchema = z.object({
   name: z.string().min(6, {
@@ -28,20 +29,6 @@ const formSchema = z.object({
     }),
 });
 
-type PropTypes = {
-  openModal: boolean;
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedTalent: {
-    _id: string;
-    name: string;
-    role: string;
-    image: { name: string; _id: string };
-  } | null;
-  setData: React.Dispatch<React.SetStateAction<any>>;
-};
-
 export default function ModalUpdateTalent({
   openModal,
   setOpenModal,
@@ -49,7 +36,7 @@ export default function ModalUpdateTalent({
   setLoading,
   selectedTalent,
   setData,
-}: PropTypes) {
+}: ModalTalents) {
   const { setToaster } = useContext(ToasterContext);
   const [error, setError] = useState<string>("");
   const token = JSON.parse(localStorage.getItem("token") || "");
