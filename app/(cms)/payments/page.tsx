@@ -49,7 +49,7 @@ export default function PaymentsPage() {
 
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("token") || "");
-    const getCategoriesAPI = async () => {
+    const getPaymentsAPI = async () => {
       setLoading(true);
       try {
         const response = await debouncedGetData(
@@ -67,7 +67,7 @@ export default function PaymentsPage() {
       }
     };
 
-    getCategoriesAPI();
+    getPaymentsAPI();
   }, [debouncedGetData]);
 
   return (

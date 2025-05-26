@@ -54,7 +54,7 @@ export default function TalentsPage() {
 
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("token") || "");
-    const getCategoriesAPI = async () => {
+    const getTalentsAPI = async () => {
       setLoading(true);
       try {
         const response = await debouncedGetData(
@@ -72,7 +72,7 @@ export default function TalentsPage() {
       }
     };
 
-    getCategoriesAPI();
+    getTalentsAPI();
   }, [debouncedGetData, keyword]);
 
   return (
