@@ -10,6 +10,7 @@ import { Form } from "../ui/form";
 import { putData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
 import { uploadImage } from "@/utils/uploadImage";
+import { ModalPayments } from "@/types/modalPayments.type";
 
 const formSchema = z.object({
   type: z.string().min(2, {
@@ -25,19 +26,6 @@ const formSchema = z.object({
     }),
 });
 
-type PropTypes = {
-  openModal: boolean;
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedPayment: {
-    _id: string;
-    type: string;
-    image: { name: string; _id: string };
-  } | null;
-  setData: React.Dispatch<React.SetStateAction<any>>;
-};
-
 export default function ModalUpdatePayment({
   openModal,
   setOpenModal,
@@ -45,7 +33,7 @@ export default function ModalUpdatePayment({
   setLoading,
   selectedPayment,
   setData,
-}: PropTypes) {
+}: ModalPayments) {
   const { setToaster } = useContext(ToasterContext);
   const [error, setError] = useState<string>("");
   const token = JSON.parse(localStorage.getItem("token") || "");

@@ -4,20 +4,7 @@ import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import Button from "../ui/Button/index";
 import { deleteData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
-
-type PropTypes = {
-  openModal: boolean;
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedPayment: {
-    _id: string;
-    type: string;
-    image: { name: string; _id: string };
-  } | null;
-  setData: React.Dispatch<React.SetStateAction<any>>;
-  data: { _id: string; type: string; image: { name: string; _id: string } }[];
-};
+import { ModalPayments } from "@/types/modalPayments.type";
 
 export default function ModalDeletePayment({
   openModal,
@@ -27,7 +14,7 @@ export default function ModalDeletePayment({
   selectedPayment,
   setData,
   data,
-}: PropTypes) {
+}: ModalPayments) {
   const { setToaster } = useContext(ToasterContext);
 
   async function onSubmit() {
@@ -43,10 +30,11 @@ export default function ModalDeletePayment({
       if (res?.status === 200) {
         setOpenModal(false);
         setData(
-          data.filter(
-            (item: { _id: string; type: string }) =>
-              item._id !== selectedPayment?._id
-          )
+          data &&
+            data.filter(
+              (item: { _id: string; type: string }) =>
+                item._id !== selectedPayment?._id
+            )
         );
         setToaster({
           variant: "success",
