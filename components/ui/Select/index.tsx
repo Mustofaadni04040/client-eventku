@@ -7,10 +7,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export function SelectComponent({ options, placeholder, handleChange }: any) {
+export function SelectComponent({
+  options,
+  placeholder,
+  handleChange,
+  id,
+}: any) {
   return (
     <Select onValueChange={handleChange}>
-      <SelectTrigger className="w-64">
+      <SelectTrigger className="w-64" id={id}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>

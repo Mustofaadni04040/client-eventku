@@ -22,6 +22,7 @@ export async function fetchOptions(url: string, token: string) {
   return json?.data?.map((item: any) => ({
     value: item._id,
     label: item.name,
+    // target: { value: item._id },
   }));
 }
 

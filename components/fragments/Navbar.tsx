@@ -122,7 +122,7 @@ export default function Navbar() {
                 {token ? (
                   <Button
                     type="button"
-                    classname="bg-transparent border text-primary hover:bg-slate-100"
+                    classname="bg-transparent text-primary hover:bg-slate-100"
                     onClick={handleSignOut}
                   >
                     Sign Out

@@ -33,7 +33,7 @@ export default function FormInput({
                 type={type}
                 placeholder={placeholder}
                 {...field}
-                className="text-sm"
+                className={`text-sm ${type === "date" ? "w-fit" : ""}`}
               />
             )}
           </FormControl>

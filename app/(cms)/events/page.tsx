@@ -103,13 +103,13 @@ export default function EventsPage() {
             />
 
             <SelectComponent
-              value={keywordCategory}
+              value={keywordCategory} // mendapatkan value keyword params
               placeholder="Masukan pencarian kategori"
               options={dataCategories}
               handleChange={(e: string) => setKeywordCategory(e)}
             />
             <SelectComponent
-              value={keywordTalent}
+              value={keywordTalent} // mendapatkan value keyword params
               placeholder="Masukan pencarian talent"
               options={dataTalents}
               handleChange={(e: string) => setKeywordTalent(e)}
@@ -124,7 +124,7 @@ export default function EventsPage() {
         </div>
 
         <Table className="my-5">
-          <TableCaption>A list of events.</TableCaption>
+          <TableCaption>A list of all events.</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">No</TableHead>
@@ -133,7 +133,7 @@ export default function EventsPage() {
               <TableHead>Date</TableHead>
               <TableHead>Venue</TableHead>
               <TableHead>Category</TableHead>
-              <TableHead>Speaker</TableHead>
+              <TableHead>Talent</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
