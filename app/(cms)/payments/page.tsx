@@ -15,7 +15,6 @@ import {
 import Link from "next/link";
 import { getData } from "@/utils/fetch";
 import debounce from "debounce-promise";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useDispatch, useSelector } from "react-redux";
 import { accessTalents } from "@/utils/access";
 import { isHasAccess } from "@/utils/hasAccess";

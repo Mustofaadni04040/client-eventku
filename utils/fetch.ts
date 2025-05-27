@@ -10,6 +10,21 @@ export async function getData(url: string, params?: any, token?: string) {
   });
 }
 
+export async function fetchOptions(url: string, token: string) {
+  const response = await fetch(`${config.api_host_dev}${url}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const json = await response.json();
+
+  return json?.data?.map((item: any) => ({
+    value: item._id,
+    label: item.name,
+  }));
+}
+
 export async function postData(
   url: string,
   payload: any,

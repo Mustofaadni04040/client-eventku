@@ -13,14 +13,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Link from "next/link";
-import { getData } from "@/utils/fetch";
+import { fetchOptions, getData } from "@/utils/fetch";
 import debounce from "debounce-promise";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useDispatch, useSelector } from "react-redux";
-import { accessTalents } from "@/utils/access";
+import { accessEvents } from "@/utils/access";
 import { isHasAccess } from "@/utils/hasAccess";
-import ModalUpdatePayment from "@/components/fragments/ModalUpdatePayment";
-import ModalDeletePayment from "@/components/fragments/ModalDeletePayment";
 import { CategoryType, EventType, TalentType } from "@/types/events.type";
 import { formatDate } from "@/utils/formatDate";
 import Input from "@/components/ui/Input/index";
@@ -71,56 +68,27 @@ export default function EventsPage() {
   }, [debouncedGetData, keyword, keywordCategory, keywordTalent]);
 
   useEffect(() => {
-    const getCategoriesAPI = async () => {
+    const fetchDropdownData = async () => {
       try {
         const token = JSON.parse(localStorage.getItem("token") || "");
-        const response = await getData(`/cms/categories`, undefined, token);
+        const [categoriesResponse, talentsResponse] = await Promise.all([
+          fetchOptions(`/cms/categories`, token),
+          fetchOptions(`/cms/talents`, token),
+        ]);
 
-        let _temp: any = [];
-
-        response?.data?.data?.map((item: { _id: string; name: string }) => {
-          _temp.push({
-            value: item._id,
-            label: item.name,
-          });
-        });
-
-        setDataCategories(_temp);
+        setDataCategories(categoriesResponse);
+        setDataTalents(talentsResponse);
       } catch (error) {
         console.log(error);
       }
     };
 
-    getCategoriesAPI();
-  }, []);
-
-  useEffect(() => {
-    const getTalentsAPI = async () => {
-      try {
-        const token = JSON.parse(localStorage.getItem("token") || "");
-        const response = await getData(`/cms/talents`, undefined, token);
-
-        let _temp: any = [];
-
-        response?.data?.data?.map((item: { _id: string; name: string }) => {
-          _temp.push({
-            value: item._id,
-            label: item.name,
-          });
-        });
-
-        setDataTalents(_temp);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getTalentsAPI();
+    fetchDropdownData();
   }, []);
 
   return (
     <div className="max-w-7xl mx-auto my-10">
-      <Breadcrumbs textSecond="payments" />
+      <Breadcrumbs textSecond="Events" />
 
       <div className="mb-5 mt-10">
         <div className="w-full flex justify-between items-center">
@@ -129,7 +97,7 @@ export default function EventsPage() {
               type="text"
               name="query"
               value={keyword}
-              placeholder="Cari berdasarkan nama events"
+              placeholder="Cari berdasarkan nama event"
               className="w-[300px]"
               onChange={(e) => dispatch(setKeyword(e.target.value))}
             />
@@ -148,9 +116,9 @@ export default function EventsPage() {
             />
           </div>
 
-          {isHasAccess(accessTalents.tambah, role) && (
+          {isHasAccess(accessEvents.tambah, role) && (
             <Button type="button" classname="bg-primary hover:bg-primary/90">
-              <Link href="/payments/create">Tambah</Link>
+              <Link href="/events/create">Tambah</Link>
             </Button>
           )}
         </div>
@@ -188,7 +156,7 @@ export default function EventsPage() {
                     <TableCell className="text-right flex justify-end">
                       <div className="flex items-center gap-3">
                         {isHasAccess(
-                          accessTalents.edit || accessTalents.hapus,
+                          accessEvents.edit || accessEvents.hapus,
                           role
                         ) && (
                           <>
@@ -223,29 +191,6 @@ export default function EventsPage() {
           </TableBody>
         </Table>
       </div>
-
-      {/* {modalType === "edit" && (
-        <ModalUpdatePayment
-          loading={loading}
-          setLoading={setLoading}
-          openModal={openModal}
-          setOpenModal={setOpenModal}
-          selectedEvent={selectedEvent}
-          setDataEvents={setDataEvents}
-        />
-      )}
-
-      {modalType === "delete" && (
-        <ModalDeletePayment
-          openModal={openModal}
-          setOpenModal={setOpenModal}
-          loading={loading}
-          setLoading={setLoading}
-          selectedEvent={selectedEvent}
-          setDataEvents={setDataEvents}
-          data={data}
-        />
-      )} */}
     </div>
   );
 }

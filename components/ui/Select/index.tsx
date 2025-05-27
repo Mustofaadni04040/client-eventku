@@ -15,8 +15,8 @@ export function SelectComponent({ options, placeholder, handleChange }: any) {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          {options?.map((option: any) => (
-            <SelectItem key={option.value} value={option.value}>
+          {options?.map((option: any, index: number) => (
+            <SelectItem key={index} value={option.value}>
               {option.label}
             </SelectItem>
           ))}

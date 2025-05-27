@@ -15,7 +15,6 @@ import {
 import Link from "next/link";
 import { getData } from "@/utils/fetch";
 import debounce from "debounce-promise";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useSelector } from "react-redux";
 import { accessCategories } from "@/utils/access";
 import ModalUpdateCategories from "@/components/fragments/ModalUpdateCategories";
