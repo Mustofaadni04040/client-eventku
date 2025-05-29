@@ -17,10 +17,10 @@ import { getData } from "@/utils/fetch";
 import debounce from "debounce-promise";
 import { useSelector } from "react-redux";
 import { accessCategories } from "@/utils/access";
-import ModalUpdateCategories from "@/components/fragments/ModalUpdateCategories";
-import ModalDeleteCategories from "@/components/fragments/ModalDeleteCategories";
 import { isHasAccess } from "@/utils/hasAccess";
 import SkeletonComponent from "@/components/fragments/Skeleton";
+import ModalUpdateCategories from "@/components/fragments/Categories/ModalUpdateCategories";
+import ModalDeleteCategories from "@/components/fragments/Categories/ModalDeleteCategories";
 
 type PropTypes = {
   _id: string;

@@ -12,6 +12,7 @@ import Breadcrumbs from "@/components/fragments/Breadcrumb";
 import { useRouter } from "next/navigation";
 import { postData } from "@/utils/fetch";
 import { categoryFormSchema } from "@/utils/formSchema";
+import CategoriesForm from "@/components/fragments/Categories/CategoriesForm";
 
 export default function CreateCategoriesPage() {
   const { setToaster } = useContext(ToasterContext);
@@ -73,21 +74,7 @@ export default function CreateCategoriesPage() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="min-w-96 flex flex-col gap-3 p-5 border border-slate-200 rounded-xl"
           >
-            <FormInput
-              form={form}
-              name="name"
-              label="Nama Kategori"
-              type="text"
-              placeholder="Masukkan nama kategori"
-            />
-            {form?.formState?.errors && (
-              <p className="text-xs text-red-500">
-                {form?.formState?.errors?.name?.message}
-              </p>
-            )}
-            {error && !form.formState.errors && (
-              <p className="text-xs text-red-500">{error}</p>
-            )}
+            <CategoriesForm form={form} error={error} />
             <Button
               loading={loading}
               disabled={loading}

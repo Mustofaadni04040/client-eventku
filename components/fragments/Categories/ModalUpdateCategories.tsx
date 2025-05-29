@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import Modal from "../layout/modalLayout";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
-import Button from "../ui/Button/index";
-import FormInput from "../ui/FormField";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "../ui/form";
+import { Form } from "../../ui/form";
 import { putData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
 import { ModalCategories } from "@/types/modalCategories.type";
 import { categoryFormSchema } from "@/utils/formSchema";
+import CategoriesForm from "./CategoriesForm";
+import Modal from "@/components/layout/modalLayout";
+import Button from "../../ui/Button/index";
 
 export default function ModalUpdateCategories({
   openModal,
@@ -80,21 +80,8 @@ export default function ModalUpdateCategories({
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormInput
-            form={form}
-            name="name"
-            label="Nama Kategori"
-            type="text"
-            placeholder="Update nama kategori"
-          />
-          {form?.formState?.errors && (
-            <p className="text-xs text-red-500">
-              {form?.formState?.errors?.name?.message}
-            </p>
-          )}
-          {error && !form.formState.errors && (
-            <p className="text-xs text-red-500">{error}</p>
-          )}
+          <CategoriesForm form={form} error={error} />
+
           <DialogFooter className="sm:justify-end mt-5">
             <DialogClose asChild>
               <Button
