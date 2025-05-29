@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
-import Modal from "../layout/modalLayout";
+import Modal from "../../layout/modalLayout";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
-import Button from "../ui/Button/index";
-import FormInput from "../ui/FormField";
+import Button from "../../ui/Button/index";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "../ui/form";
+import { Form } from "../../ui/form";
 import { putData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
 import { uploadImage } from "@/utils/uploadImage";
 import { ModalTalents } from "@/types/modalTalents.type";
 import { talentFormSchema } from "@/utils/formSchema";
+import TalentForm from "./TalentForm";
 
 export default function ModalUpdateTalent({
   openModal,
@@ -124,36 +124,7 @@ export default function ModalUpdateTalent({
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-2"
         >
-          <FormInput
-            form={form}
-            name="name"
-            label="Nama Talent"
-            type="text"
-            placeholder="Masukkan nama talent"
-          />
-          <FormInput
-            form={form}
-            name="role"
-            label="Role Talent"
-            type="text"
-            placeholder="Masukkan role talent"
-          />
-          <FormInput
-            form={form}
-            name="image"
-            label="Profile Talent"
-            type="file"
-          />
-          {form?.formState?.errors && (
-            <p className="text-xs text-red-500">
-              {form?.formState?.errors?.name?.message?.toString() ||
-                form?.formState?.errors?.role?.message?.toString() ||
-                form?.formState?.errors?.image?.message?.toString()}
-            </p>
-          )}
-          {error && !form.formState.errors && (
-            <p className="text-xs text-red-500">{error}</p>
-          )}
+          <TalentForm error={error} form={form} />
           <DialogFooter className="sm:justify-end mt-5">
             <DialogClose asChild>
               <Button

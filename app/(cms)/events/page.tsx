@@ -15,7 +15,7 @@ import {
 import Link from "next/link";
 import { fetchOptions, getData } from "@/utils/fetch";
 import debounce from "debounce-promise";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { accessEvents } from "@/utils/access";
 import { isHasAccess } from "@/utils/hasAccess";
 import { CategoryType, EventType, TalentType } from "@/types/events.type";

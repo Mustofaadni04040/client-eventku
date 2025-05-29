@@ -6,13 +6,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
-import FormInput from "@/components/ui/FormField";
 import { ToasterContext } from "@/context/ToasterContext";
 import Breadcrumbs from "@/components/fragments/Breadcrumb";
 import { useRouter } from "next/navigation";
 import { postData } from "@/utils/fetch";
 import { uploadImage } from "@/utils/uploadImage";
 import { talentFormSchema } from "@/utils/formSchema";
+import TalentForm from "@/components/fragments/Talent/TalentForm";
 
 export default function CreateTalentsPage() {
   const { setToaster } = useContext(ToasterContext);
@@ -94,36 +94,7 @@ export default function CreateTalentsPage() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="min-w-96 flex flex-col gap-3 p-5 border border-slate-200 rounded-xl"
           >
-            <FormInput
-              form={form}
-              name="name"
-              label="Nama Talent"
-              type="text"
-              placeholder="Masukkan nama talent"
-            />
-            <FormInput
-              form={form}
-              name="role"
-              label="Role Talent"
-              type="text"
-              placeholder="Masukkan role talent"
-            />
-            <FormInput
-              form={form}
-              name="image"
-              label="Profile Talent"
-              type="file"
-            />
-            {form?.formState?.errors && (
-              <p className="text-xs text-red-500">
-                {form?.formState?.errors?.name?.message?.toString() ||
-                  form?.formState?.errors?.role?.message?.toString() ||
-                  form?.formState?.errors?.image?.message?.toString()}
-              </p>
-            )}
-            {error && !form.formState.errors && (
-              <p className="text-xs text-red-500">{error}</p>
-            )}
+            <TalentForm form={form} error={error} />
             <Button
               loading={loading}
               disabled={loading}

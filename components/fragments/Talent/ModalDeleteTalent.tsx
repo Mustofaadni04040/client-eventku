@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import Modal from "../layout/modalLayout";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
-import Button from "../ui/Button/index";
 import { deleteData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
 import { ModalTalents } from "@/types/modalTalents.type";
+import Modal from "@/components/layout/modalLayout";
+import Button from "@/components/ui/Button/index";
 
 export default function ModalDeleteTalent({
   openModal,

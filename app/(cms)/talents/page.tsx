@@ -15,17 +15,16 @@ import {
 import Link from "next/link";
 import { getData } from "@/utils/fetch";
 import debounce from "debounce-promise";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { accessTalents } from "@/utils/access";
 import { isHasAccess } from "@/utils/hasAccess";
-import Input from "@/components/ui/Input/index";
 import { setKeyword } from "@/redux/keyword/keywordSlice";
 import Image from "next/image";
 import { config } from "@/configs";
-import ModalUpdateTalent from "@/components/fragments/ModalUpdateTalent";
-import ModalDeleteTalent from "@/components/fragments/ModalDeleteTalent";
 import SkeletonComponent from "@/components/fragments/Skeleton";
 import Filter from "@/components/fragments/Filter/Filter";
+import ModalUpdateTalent from "@/components/fragments/Talent/ModalUpdateTalent";
+import ModalDeleteTalent from "@/components/fragments/Talent/ModalDeleteTalent";
 
 type PropTypes = {
   _id: string;
@@ -43,7 +42,6 @@ export default function TalentsPage() {
   const [skeletonCount, setSkeletonCount] = useState<number>(5);
   const role = useSelector((state: any) => state.auth.role);
   const { keyword } = useSelector((state: any) => state.keyword);
-  const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<TypeModal>(null);
   const [selectedTalent, setSelectedTalent] = useState<{
