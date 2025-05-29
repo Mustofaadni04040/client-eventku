@@ -24,6 +24,7 @@ import Input from "@/components/ui/Input/index";
 import { setKeyword } from "@/redux/keyword/keywordSlice";
 import { SelectComponent } from "@/components/ui/Select/index";
 import SkeletonComponent from "@/components/fragments/Skeleton";
+import ModalUpdateEvent from "@/components/fragments/ModalUpdateEvent";
 
 type TypeModal = "edit" | "delete" | null;
 
@@ -124,7 +125,7 @@ export default function EventsPage() {
         </div>
 
         <Table className="my-5">
-          <TableCaption>A list of all events.</TableCaption>
+          <TableCaption>A list all of events.</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">No</TableHead>
@@ -191,6 +192,17 @@ export default function EventsPage() {
           </TableBody>
         </Table>
       </div>
+
+      {modalType === "edit" && (
+        <ModalUpdateEvent
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          selectedEvent={selectedEvent!}
+          loading={loading}
+          setLoading={setLoading}
+          setData={setDataEvents}
+        />
+      )}
     </div>
   );
 }

@@ -21,7 +21,11 @@ export function SelectComponent({
       <SelectContent>
         <SelectGroup>
           {options?.map((option: any, index: number) => (
-            <SelectItem key={index} value={option.value}>
+            <SelectItem
+              key={index}
+              value={option.value}
+              className="hover:bg-gray-100"
+            >
               {option.label}
             </SelectItem>
           ))}

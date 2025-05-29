@@ -15,10 +15,16 @@ import { uploadImage } from "@/utils/uploadImage";
 import { eventFormSchema } from "@/utils/formSchema";
 import { SelectComponent } from "@/components/ui/Select/index";
 import { CategoryType, TalentType } from "@/types/events.type";
+import {
+  handleMinusKeyPoint,
+  handleMinusTicket,
+  handlePlusKeyPoint,
+  handlePlusTicket,
+} from "@/utils/handleEvent";
+import moment from "moment";
 
 export default function CreateEventsPage() {
   const { setToaster } = useContext(ToasterContext);
-  const [error, setError] = useState<string>("");
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const token = JSON.parse(localStorage.getItem("token") || "");
@@ -30,7 +36,7 @@ export default function CreateEventsPage() {
     resolver: zodResolver(eventFormSchema),
     defaultValues: {
       title: "",
-      date: "",
+      date: moment().format("YYYY-MM-DD"),
       image: "",
       about: "",
       venueName: "",
@@ -39,7 +45,7 @@ export default function CreateEventsPage() {
       tickets: [
         {
           type: "",
-          status: "",
+          statusTicketCategories: "",
           stock: "",
           price: "",
         },
@@ -49,8 +55,6 @@ export default function CreateEventsPage() {
       statusEvent: "",
     },
   });
-
-  console.log(form.formState.errors);
 
   const onSubmit = async (values: z.infer<typeof eventFormSchema>) => {
     setLoading(true);
@@ -93,7 +97,6 @@ export default function CreateEventsPage() {
         router.push("/events");
       }
     } catch (error: any) {
-      setError(error?.response?.data?.msg || "Internal Server Error");
       setToaster({
         variant: "danger",
         message: error?.response?.data?.msg || "Terjadi kesalahan server",
@@ -121,39 +124,6 @@ export default function CreateEventsPage() {
 
     fetchDropdownData();
   }, []);
-
-  const handlePlusKeyPoint = () => {
-    let _tem = [...form.getValues("keyPoint")];
-    _tem.push("");
-
-    form.setValue("keyPoint", _tem);
-  };
-
-  const handlePlusTicket = () => {
-    let _tem = [...form.getValues("tickets")];
-    _tem.push({
-      type: "",
-      status: "",
-      stock: "",
-      price: "",
-    });
-
-    form.setValue("tickets", _tem);
-  };
-
-  const handleMinusKeyPoint = (index: number) => {
-    let _tem = [...form.getValues("keyPoint")];
-    _tem.splice(index, 1);
-
-    form.setValue("keyPoint", _tem);
-  };
-
-  const handleMinusTicket = (index: number) => {
-    let _tem = [...form.getValues("tickets")];
-    _tem.splice(index, 1);
-
-    form.setValue("tickets", _tem);
-  };
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -184,7 +154,6 @@ export default function CreateEventsPage() {
                 name="date"
                 label="Waktu Event"
                 type="date"
-                placeholder="Masukkan role talent"
               />
               <FormInput
                 form={form}
@@ -247,7 +216,7 @@ export default function CreateEventsPage() {
                 {index > 0 && (
                   <Button
                     type="button"
-                    onClick={() => handleMinusKeyPoint(index)}
+                    onClick={() => handleMinusKeyPoint(index, form)}
                     classname="mt-2 bg-transparent border border-red-500 text-red-500 hover:bg-slate-100 flex items-center"
                   >
                     Hapus Key Point {index + 1}
@@ -258,7 +227,7 @@ export default function CreateEventsPage() {
             ))}
             <Button
               type="button"
-              onClick={handlePlusKeyPoint}
+              onClick={() => handlePlusKeyPoint(form)}
               classname="w-fit bg-transparent border border-green-500 text-greenborder-green-500 hover:bg-slate-100 flex items-center text-green-500"
             >
               Tambah Key Point <i className="bx  bx-plus-circle text-lg" />
@@ -290,7 +259,7 @@ export default function CreateEventsPage() {
                   />
                   <FormInput
                     form={form}
-                    name={`tickets.${index}.status`}
+                    name={`tickets.${index}.statusTicketCategories`}
                     label={`Status Tiket ${index + 1}`}
                     type="text"
                     placeholder="Masukkan status tiket"
@@ -313,31 +282,33 @@ export default function CreateEventsPage() {
                 {index > 0 && (
                   <Button
                     type="button"
-                    onClick={() => handleMinusTicket(index)}
+                    onClick={() => handleMinusTicket(index, form)}
                     classname="mt-2 bg-transparent border border-red-500 text-red-500 hover:bg-slate-100 flex items-center"
                   >
                     Hapus Tiket {index + 1}
-                    <i className="bx  bx-minus-circle text-lg" />
+                    <i className="bx bx-minus-circle text-lg" />
                   </Button>
                 )}
               </div>
             ))}
             <Button
               type="button"
-              onClick={handlePlusTicket}
+              onClick={() => handlePlusTicket(form)}
               classname="w-fit bg-transparent border border-green-500 text-greenborder-green-500 hover:bg-slate-100 flex items-center text-green-500"
             >
-              Tambah Tiket <i className="bx  bx-plus-circle text-lg" />
+              Tambah Tiket <i className="bx bx-plus-circle text-lg" />
             </Button>
 
-            <Button
-              loading={loading}
-              disabled={loading}
-              type="submit"
-              classname="mt-5 bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Tambah
-            </Button>
+            <div className="w-full flex justify-end">
+              <Button
+                loading={loading}
+                disabled={loading}
+                type="submit"
+                classname="w-fit mt-5 bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Tambah
+              </Button>
+            </div>
           </form>
         </Form>
       </div>

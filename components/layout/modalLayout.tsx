@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -25,7 +25,7 @@ export default function Modal({
     <div>
       <Dialog open={openModal}>
         <DialogContent
-          className="sm:max-w-[600px] [&>button]:hidden"
+          className="modal sm:max-w-[600px] [&>button]:hidden max-h-[80vh] overflow-y-auto"
           onInteractOutside={() => setOpenModal(!openModal)}
         >
           <DialogHeader>

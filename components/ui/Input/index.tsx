@@ -1,5 +1,6 @@
 import React from "react";
 import { Input as BaseInput } from "@/components/ui/input";
+import moment from "moment";
 
 type PropTypes = {
   type: string;
@@ -18,12 +19,17 @@ const Input = React.forwardRef<HTMLInputElement, PropTypes>(
         ref={ref}
         type={type}
         name={name}
-        value={value}
+        value={type === "date" ? moment(value).format("YYYY-MM-DD") : value}
         onChange={onChange}
         placeholder={placeholder}
         className={className}
         accept={accept}
         id={name}
+        onWheel={(e) => {
+          if (type === "number") {
+            (e.target as HTMLInputElement).blur();
+          }
+        }}
       />
     );
   }

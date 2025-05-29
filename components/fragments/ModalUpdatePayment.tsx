@@ -33,11 +33,11 @@ export default function ModalUpdatePayment({
   });
 
   useEffect(() => {
-    // reset form setiap select talent
-    if (selectedPayment) {
+    // reset form setiap open modal
+    if (openModal) {
       form.reset({ type: selectedPayment?.type });
     }
-  }, [selectedPayment, form]);
+  }, [openModal, selectedPayment, form]);
 
   async function onSubmit(values: z.infer<typeof paymentFormSchema>) {
     setLoading(true);

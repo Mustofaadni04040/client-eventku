@@ -30,10 +30,10 @@ export default function ModalUpdateCategories({
   });
 
   useEffect(() => {
-    if (selectedCategories) {
+    if (openModal) {
       form.reset({ name: selectedCategories?.name });
     }
-  }, [selectedCategories, form]);
+  }, [openModal, selectedCategories, form]);
 
   async function onSubmit(values: z.infer<typeof categoryFormSchema>) {
     setLoading(true);

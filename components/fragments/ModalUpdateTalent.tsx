@@ -34,11 +34,11 @@ export default function ModalUpdateTalent({
   });
 
   useEffect(() => {
-    // reset form setiap select talent
-    if (selectedTalent) {
+    // reset form setiap open modal
+    if (openModal) {
       form.reset({ name: selectedTalent?.name, role: selectedTalent?.role });
     }
-  }, [selectedTalent, form]);
+  }, [openModal, selectedTalent, form]);
 
   async function onSubmit(values: z.infer<typeof talentFormSchema>) {
     setLoading(true);

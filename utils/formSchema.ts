@@ -65,15 +65,9 @@ export const eventFormSchema = z.object({
       type: z.string().min(2, {
         message: "Tipe tiket harus lebih dari 2 karakter.",
       }),
-      status: z.string().min(2, {
-        message: "Status tiket harus lebih dari 2 karakter.",
-      }),
-      stock: z.string().min(1, {
-        message: "Stok tiket harus diisi.",
-      }),
-      price: z.string().min(1, {
-        message: "Harga tiket harus diisi.",
-      }),
+      statusTicketCategories: z.any(),
+      stock: z.any(),
+      price: z.any(),
     })
   ),
   category: z.any(),
