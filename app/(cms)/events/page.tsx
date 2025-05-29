@@ -20,11 +20,10 @@ import { accessEvents } from "@/utils/access";
 import { isHasAccess } from "@/utils/hasAccess";
 import { CategoryType, EventType, TalentType } from "@/types/events.type";
 import { formatDate } from "@/utils/formatDate";
-import Input from "@/components/ui/Input/index";
 import { setKeyword } from "@/redux/keyword/keywordSlice";
-import { SelectComponent } from "@/components/ui/Select/index";
 import SkeletonComponent from "@/components/fragments/Skeleton";
 import ModalUpdateEvent from "@/components/fragments/ModalUpdateEvent";
+import Filter from "@/components/fragments/Filter/Filter";
 
 type TypeModal = "edit" | "delete" | null;
 
@@ -39,7 +38,6 @@ export default function EventsPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [skeletonCount, setSkeletonCount] = useState<number>(5);
   const role = useSelector((state: any) => state.auth.role);
-  const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<TypeModal>(null);
   const [selectedEvent, setSelectedEvent] = useState<EventType>();
@@ -94,26 +92,16 @@ export default function EventsPage() {
       <div className="mb-5 mt-10">
         <div className="w-full flex justify-between items-center">
           <div className="flex items-center gap-5">
-            <Input
-              type="text"
-              name="query"
-              value={keyword}
+            <Filter
+              keyword={keyword}
+              setKeyword={setKeyword}
+              keywordCategory={keywordCategory}
+              setKeywordCategory={setKeywordCategory}
+              keywordTalent={keywordTalent}
+              setKeywordTalent={setKeywordTalent}
+              dataCategories={dataCategories}
+              dataTalents={dataTalents}
               placeholder="Cari berdasarkan nama event"
-              className="w-[300px]"
-              onChange={(e) => dispatch(setKeyword(e.target.value))}
-            />
-
-            <SelectComponent
-              value={keywordCategory} // mendapatkan value keyword params
-              placeholder="Masukan pencarian kategori"
-              options={dataCategories}
-              handleChange={(e: string) => setKeywordCategory(e)}
-            />
-            <SelectComponent
-              value={keywordTalent} // mendapatkan value keyword params
-              placeholder="Masukan pencarian talent"
-              options={dataTalents}
-              handleChange={(e: string) => setKeywordTalent(e)}
             />
           </div>
 

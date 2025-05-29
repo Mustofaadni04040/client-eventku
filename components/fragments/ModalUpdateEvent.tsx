@@ -38,8 +38,12 @@ export default function ModalUpdateEvent({
 }) {
   const { setToaster } = useContext(ToasterContext);
   const token = JSON.parse(localStorage.getItem("token") || "");
-  const [dataCategories, setDataCategories] = useState<any[]>([]);
-  const [dataTalents, setDataTalents] = useState<any[]>([]);
+  const [dataCategories, setDataCategories] = useState<
+    { value: string; label: string }[]
+  >([]);
+  const [dataTalents, setDataTalents] = useState<
+    { value: string; label: string }[]
+  >([]);
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: {

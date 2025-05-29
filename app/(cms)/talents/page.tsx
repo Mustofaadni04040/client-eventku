@@ -25,6 +25,7 @@ import { config } from "@/configs";
 import ModalUpdateTalent from "@/components/fragments/ModalUpdateTalent";
 import ModalDeleteTalent from "@/components/fragments/ModalDeleteTalent";
 import SkeletonComponent from "@/components/fragments/Skeleton";
+import Filter from "@/components/fragments/Filter/Filter";
 
 type PropTypes = {
   _id: string;
@@ -81,13 +82,10 @@ export default function TalentsPage() {
 
       <div className="mb-5 mt-10">
         <div className="w-full flex justify-between items-center">
-          <Input
-            type="text"
-            name="query"
-            value={keyword}
-            placeholder="Cari berdasarkan nama talents"
-            className="w-[300px]"
-            onChange={(e) => dispatch(setKeyword(e.target.value))}
+          <Filter
+            keyword={keyword}
+            setKeyword={setKeyword}
+            placeholder="Cari berdasarkan nama talent"
           />
 
           {isHasAccess(accessTalents.tambah, role) && (

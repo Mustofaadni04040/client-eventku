@@ -30,8 +30,6 @@ export default function CreateEventsPage() {
   const token = JSON.parse(localStorage.getItem("token") || "");
   const [dataCategories, setDataCategories] = useState<CategoryType[]>([]);
   const [dataTalents, setDataTalents] = useState<TalentType[]>([]);
-  const [keywordCategory, setKeywordCategory] = useState<string>("");
-  const [keywordTalent, setKeywordTalent] = useState<string>("");
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: {
@@ -50,8 +48,8 @@ export default function CreateEventsPage() {
           price: "",
         },
       ],
-      category: keywordCategory,
-      talent: keywordTalent,
+      category: "",
+      talent: "",
       statusEvent: "",
     },
   });
@@ -82,8 +80,8 @@ export default function CreateEventsPage() {
         venueName: values.venueName,
         tagline: values.tagline,
         keyPoint: values.keyPoint,
-        category: keywordCategory,
-        talent: keywordTalent,
+        category: form.getValues("category"),
+        talent: form.getValues("talent"),
         statusEvent: values.statusEvent,
         tickets: values.tickets,
       };
@@ -173,11 +171,10 @@ export default function CreateEventsPage() {
                 <FormLabel htmlFor="category-select">Kategori Event</FormLabel>
                 <SelectComponent
                   id="category-select"
-                  value={keywordCategory} // mendapatkan value keyword params
+                  value={form.getValues("category")} // mendapatkan value keyword params
                   placeholder="Select kategori event"
                   options={dataCategories}
                   handleChange={(e: string) => {
-                    setKeywordCategory(e);
                     form.setValue("category", e);
                   }}
                 />
@@ -186,11 +183,10 @@ export default function CreateEventsPage() {
                 <FormLabel htmlFor="talent-select">Talent Event</FormLabel>
                 <SelectComponent
                   id="talent-select"
-                  value={keywordTalent} // mendapatkan value keyword params
+                  value={form.getValues("talent")} // mendapatkan value keyword params
                   placeholder="Select talent event"
                   options={dataTalents}
                   handleChange={(e: string) => {
-                    setKeywordTalent(e);
                     form.setValue("talent", e);
                   }}
                 />
