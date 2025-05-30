@@ -22,8 +22,8 @@ import { CategoryType, EventType, TalentType } from "@/types/events.type";
 import { formatDate } from "@/utils/formatDate";
 import { setKeyword } from "@/redux/keyword/keywordSlice";
 import SkeletonComponent from "@/components/fragments/Skeleton";
-import ModalUpdateEvent from "@/components/fragments/ModalUpdateEvent";
 import Filter from "@/components/fragments/Filter/Filter";
+import ModalUpdateEvent from "@/components/fragments/Events/ModalUpdateEvent";
 
 type TypeModal = "edit" | "delete" | null;
 

@@ -28,14 +28,7 @@ export const eventFormSchema = z.object({
     message: "Nama event harus lebih dari 2 karakter.",
   }),
   date: z.string(),
-  image: z
-    .any()
-    .refine((file) => file?.length === 1, {
-      message: "Wajib upload satu file.",
-    })
-    .refine((file) => file?.[0]?.type?.startsWith("image/"), {
-      message: "File harus berupa gambar.",
-    }),
+  image: z.any().optional(),
   about: z.string().min(10, {
     message: "Deskripsi event harus lebih dari 10 karekter.",
   }),
