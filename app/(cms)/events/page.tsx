@@ -24,6 +24,7 @@ import { setKeyword } from "@/redux/keyword/keywordSlice";
 import SkeletonComponent from "@/components/fragments/Skeleton";
 import Filter from "@/components/fragments/Filter/Filter";
 import ModalUpdateEvent from "@/components/fragments/Events/ModalUpdateEvent";
+import ModalDeleteEvent from "@/components/fragments/Events/ModalDeleteEvent";
 
 type TypeModal = "edit" | "delete" | null;
 
@@ -189,6 +190,18 @@ export default function EventsPage() {
           loading={loading}
           setLoading={setLoading}
           setData={setDataEvents}
+        />
+      )}
+
+      {modalType === "delete" && (
+        <ModalDeleteEvent
+          loading={loading}
+          setLoading={setLoading}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+          selectedEvent={selectedEvent}
+          setData={setDataEvents}
+          data={dataEvents}
         />
       )}
     </div>
