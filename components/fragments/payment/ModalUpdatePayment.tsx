@@ -1,17 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
-import Modal from "../layout/modalLayout";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
-import Button from "../ui/Button/index";
-import FormInput from "../ui/FormField";
+import Button from "../../ui/Button/index";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "../ui/form";
 import { putData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
 import { uploadImage } from "@/utils/uploadImage";
 import { ModalPayments } from "@/types/modalPayments.type";
 import { paymentFormSchema } from "@/utils/formSchema";
+import PaymentForm from "./PaymentForm";
+import Modal from "@/components/layout/modalLayout";
+import { Form } from "@/components/ui/form";
 
 export default function ModalUpdatePayment({
   openModal,
@@ -120,28 +120,7 @@ export default function ModalUpdatePayment({
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-2"
         >
-          <FormInput
-            form={form}
-            name="type"
-            label="Type Pembayaran"
-            type="text"
-            placeholder="Masukkan type pembayaran"
-          />
-          <FormInput
-            form={form}
-            name="image"
-            label="Image Pembayaran"
-            type="file"
-          />
-          {form?.formState?.errors && (
-            <p className="text-xs text-red-500">
-              {form?.formState?.errors?.type?.message?.toString() ||
-                form?.formState?.errors?.image?.message?.toString()}
-            </p>
-          )}
-          {error && !form.formState.errors && (
-            <p className="text-xs text-red-500">{error}</p>
-          )}
+          <PaymentForm form={form} error={error} />
           <DialogFooter className="sm:justify-end mt-5">
             <DialogClose asChild>
               <Button

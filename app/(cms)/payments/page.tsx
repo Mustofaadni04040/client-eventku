@@ -20,9 +20,9 @@ import { accessTalents } from "@/utils/access";
 import { isHasAccess } from "@/utils/hasAccess";
 import Image from "next/image";
 import { config } from "@/configs";
-import ModalUpdatePayment from "@/components/fragments/ModalUpdatePayment";
-import ModalDeletePayment from "@/components/fragments/ModalDeletePayment";
 import SkeletonComponent from "@/components/fragments/Skeleton";
+import ModalUpdatePayment from "@/components/fragments/payment/ModalUpdatePayment";
+import ModalDeletePayment from "@/components/fragments/payment/ModalDeletePayment";
 
 type PropTypes = {
   _id: string;

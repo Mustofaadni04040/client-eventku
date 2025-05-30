@@ -6,13 +6,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
-import FormInput from "@/components/ui/FormField";
 import { ToasterContext } from "@/context/ToasterContext";
 import Breadcrumbs from "@/components/fragments/Breadcrumb";
 import { useRouter } from "next/navigation";
 import { postData } from "@/utils/fetch";
 import { uploadImage } from "@/utils/uploadImage";
 import { paymentFormSchema } from "@/utils/formSchema";
+import PaymentForm from "@/components/fragments/payment/PaymentForm";
 
 export default function CreateTalentsPage() {
   const { setToaster } = useContext(ToasterContext);
@@ -58,8 +58,6 @@ export default function CreateTalentsPage() {
         token
       );
 
-      console.log(response);
-
       if (response?.data?.data) {
         setToaster({
           variant: "success",
@@ -94,28 +92,7 @@ export default function CreateTalentsPage() {
             onSubmit={form.handleSubmit(onSubmit)}
             className="min-w-96 flex flex-col gap-3 p-5 border border-slate-200 rounded-xl"
           >
-            <FormInput
-              form={form}
-              name="type"
-              label="Type Pembayaran"
-              type="text"
-              placeholder="Masukkan type pembayaran"
-            />
-            <FormInput
-              form={form}
-              name="image"
-              label="Image Pembayaran"
-              type="file"
-            />
-            {form?.formState?.errors && (
-              <p className="text-xs text-red-500">
-                {form?.formState?.errors?.type?.message?.toString() ||
-                  form?.formState?.errors?.image?.message?.toString()}
-              </p>
-            )}
-            {error && !form.formState.errors && (
-              <p className="text-xs text-red-500">{error}</p>
-            )}
+            <PaymentForm form={form} error={error} />
             <Button
               loading={loading}
               disabled={loading}
