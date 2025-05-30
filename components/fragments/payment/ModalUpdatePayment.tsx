@@ -43,27 +43,40 @@ export default function ModalUpdatePayment({
     setLoading(true);
 
     try {
-      const file = values.image[0];
-      const sizeMB = file.size / 1024 / 1024;
+      const file = values?.image?.[0];
       let payload;
+      let imageId: string | undefined;
+      let imageName: string | undefined;
 
-      if (sizeMB > 3) {
-        setToaster({
-          variant: "danger",
-          message: "Ukuran file melebihi 3MB",
-        });
-        setLoading(false);
-        return;
+      if (file) {
+        const sizeMB = file.size / 1024 / 1024;
+
+        if (sizeMB > 3) {
+          setToaster({
+            variant: "danger",
+            message: "Ukuran file melebihi 3MB",
+          });
+          setLoading(false);
+          return;
+        }
+        const imageRes = await uploadImage(
+          file,
+          token,
+          "/cms/images",
+          "avatar"
+        );
+        imageId = imageRes?.data?.data?._id;
+        imageName = imageRes?.data?.data?.name;
+        payload = {
+          type: values.type,
+          image: imageId,
+        };
+      } else {
+        payload = {
+          type: values.type,
+          image: selectedPayment?.image?._id, // use existing image if no new file is uploaded
+        };
       }
-
-      const imageRes = await uploadImage(file, token, "/cms/images", "avatar");
-      const imageId = imageRes?.data?.data?._id;
-      const imageName = imageRes?.data?.data?.name;
-
-      payload = {
-        type: values.type,
-        image: imageId,
-      };
 
       const response = await putData(
         `/cms/payments/${selectedPayment?._id}`,
@@ -86,7 +99,7 @@ export default function ModalUpdatePayment({
                     type: values.type,
                     image: {
                       _id: imageId,
-                      name: imageName,
+                      name: imageName || item.image.name, // use new image name if available
                     },
                   }
                 : item

@@ -15,7 +15,7 @@ import {
 import Link from "next/link";
 import { getData } from "@/utils/fetch";
 import debounce from "debounce-promise";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { accessTalents } from "@/utils/access";
 import { isHasAccess } from "@/utils/hasAccess";
 import Image from "next/image";
@@ -38,7 +38,6 @@ export default function PaymentsPage() {
   const [loading, setLoading] = useState<boolean>(false);
   const [skeletonCount, setSkeletonCount] = useState<number>(5);
   const role = useSelector((state: any) => state.auth.role);
-  const dispatch = useDispatch();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<TypeModal>(null);
   const [selectedPayment, setSelectedPayment] = useState<{
@@ -46,6 +45,8 @@ export default function PaymentsPage() {
     type: string;
     image: { name: string; _id: string };
   } | null>(null);
+
+  console.log(data);
 
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("token") || "");

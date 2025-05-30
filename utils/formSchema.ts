@@ -21,14 +21,7 @@ export const paymentFormSchema = z.object({
   type: z.string().min(2, {
     message: "Type pembayaran harus lebih dari 2 karakter.",
   }),
-  image: z
-    .any()
-    .refine((file) => file?.length === 1, {
-      message: "Wajib upload satu file.",
-    })
-    .refine((file) => file?.[0]?.type?.startsWith("image/"), {
-      message: "File harus berupa gambar.",
-    }),
+  image: z.any().optional(),
 });
 
 export const categoryFormSchema = z.object({
