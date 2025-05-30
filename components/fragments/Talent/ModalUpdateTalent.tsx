@@ -44,28 +44,43 @@ export default function ModalUpdateTalent({
     setLoading(true);
 
     try {
-      const file = values.image[0];
-      const sizeMB = file.size / 1024 / 1024;
+      const file = values.image?.[0];
       let payload;
+      let imageId: string | undefined;
+      let imageName: string | undefined;
 
-      if (sizeMB > 3) {
-        setToaster({
-          variant: "danger",
-          message: "Ukuran file melebihi 3MB",
-        });
-        setLoading(false);
-        return;
+      if (file) {
+        const sizeMB = file.size / 1024 / 1024;
+        if (sizeMB > 3) {
+          setToaster({
+            variant: "danger",
+            message: "Ukuran file melebihi 3MB",
+          });
+          setLoading(false);
+          return;
+        }
+
+        const imageRes = await uploadImage(
+          file,
+          token,
+          "/cms/images",
+          "avatar"
+        );
+        imageId = imageRes?.data?.data?._id;
+        imageName = imageRes?.data?.data?.name;
+
+        payload = {
+          name: values.name,
+          role: values.role,
+          image: imageId,
+        };
+      } else {
+        payload = {
+          name: values.name,
+          role: values.role,
+          image: selectedTalent?.image?._id,
+        };
       }
-
-      const imageRes = await uploadImage(file, token, "/cms/images", "avatar");
-      const imageId = imageRes?.data?.data?._id;
-      const imageName = imageRes?.data?.data?.name;
-
-      payload = {
-        name: values.name,
-        role: values.role,
-        image: imageId,
-      };
 
       const response = await putData(
         `/cms/talents/${selectedTalent?._id}`,
@@ -90,7 +105,7 @@ export default function ModalUpdateTalent({
                     role: values.role,
                     image: {
                       _id: imageId,
-                      name: imageName,
+                      name: imageName || item.image.name,
                     },
                   }
                 : item

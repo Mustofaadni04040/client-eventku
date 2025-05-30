@@ -7,14 +7,7 @@ export const talentFormSchema = z.object({
   role: z.string().min(4, {
     message: "Role talent harus lebih dari 4 karakter.",
   }),
-  image: z
-    .any()
-    .refine((file) => file?.length === 1, {
-      message: "Wajib upload satu file.",
-    })
-    .refine((file) => file?.[0]?.type?.startsWith("image/"), {
-      message: "File harus berupa gambar.",
-    }),
+  image: z.any().optional(),
 });
 
 export const paymentFormSchema = z.object({
