@@ -15,21 +15,22 @@ import {
 import Button from "../ui/Button/index";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { PopoverClose } from "@radix-ui/react-popover";
+import { usePathname } from "next/navigation";
+import { isHasAccess } from "@/utils/hasAccess";
 
 export default function Navbar() {
   const { role, token } = useSelector((state: any) => state.auth);
-
-  // nanti refactor
-  const isHasAccess = (roles: string[]) => {
-    const some = roles?.some((item) => item === role);
-    return some;
-  };
+  const pathname = usePathname();
 
   const handleSignOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     window.location.href = "/auth/signin";
   };
+
+  if (pathname.startsWith("/auth")) {
+    return null;
+  }
 
   return (
     <div className="h-14 bg-white border-b-[1px] border-slate-200">
@@ -45,12 +46,12 @@ export default function Navbar() {
 
         <div className="flex items-center gap-20">
           <nav className="flex items-center gap-8">
-            {isHasAccess(accessCategories.lihat) && (
+            {isHasAccess(accessCategories.lihat, role) && (
               <NavLink action="/" role={role} roles={accessCategories.lihat}>
                 Home
               </NavLink>
             )}
-            {isHasAccess(accessCategories.lihat) && (
+            {isHasAccess(accessCategories.lihat, role) && (
               <NavLink
                 action="/categories"
                 role={role}
@@ -59,7 +60,7 @@ export default function Navbar() {
                 Categories
               </NavLink>
             )}
-            {isHasAccess(accessTalents.lihat) && (
+            {isHasAccess(accessTalents.lihat, role) && (
               <NavLink
                 action="/talents"
                 role={role}
@@ -68,16 +69,16 @@ export default function Navbar() {
                 Talents
               </NavLink>
             )}
-            {isHasAccess(accessPayments.lihat) && (
+            {isHasAccess(accessPayments.lihat, role) && (
               <NavLink
                 action="/payments"
                 role={role}
                 roles={accessPayments.lihat}
               >
-                Payment
+                Payments
               </NavLink>
             )}
-            {/* {isHasAccess(accessEvents.lihat) && (
+            {/* {isHasAccess(accessEvents.lihat, role) && (
                <NavLink
               action="/organizers"
               role={role}
@@ -86,12 +87,12 @@ export default function Navbar() {
               Organizer
             </NavLink> 
             )} */}
-            {isHasAccess(accessEvents.lihat) && (
+            {isHasAccess(accessEvents.lihat, role) && (
               <NavLink action="/events" role={role} roles={accessEvents.lihat}>
                 Events
               </NavLink>
             )}
-            {isHasAccess(accessParticipant.lihat) && (
+            {isHasAccess(accessParticipant.lihat, role) && (
               <NavLink
                 action="/participants"
                 role={role}
@@ -100,7 +101,7 @@ export default function Navbar() {
                 Participants
               </NavLink>
             )}
-            {isHasAccess(accessOrders.lihat) && (
+            {isHasAccess(accessOrders.lihat, role) && (
               <NavLink action="/orders" role={role} roles={accessOrders.lihat}>
                 Transactions
               </NavLink>

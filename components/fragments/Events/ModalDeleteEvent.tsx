@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import { DialogClose, DialogFooter } from "@/components/ui/dialog";
 import { deleteData } from "@/utils/fetch";
 import { ToasterContext } from "@/context/ToasterContext";
-import { ModalTalents } from "@/types/modalTalents.type";
 import Modal from "@/components/layout/modalLayout";
 import Button from "@/components/ui/Button/index";
 import { EventType } from "@/types/events.type";
