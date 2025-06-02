@@ -46,8 +46,6 @@ export default function PaymentsPage() {
     image: { name: string; _id: string };
   } | null>(null);
 
-  console.log(data);
-
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("token") || "");
     const getPaymentsAPI = async () => {

@@ -102,7 +102,11 @@ export default function Navbar() {
               </NavLink>
             )}
             {isHasAccess(accessOrders.lihat, role) && (
-              <NavLink action="/orders" role={role} roles={accessOrders.lihat}>
+              <NavLink
+                action="/transactions"
+                role={role}
+                roles={accessOrders.lihat}
+              >
                 Transactions
               </NavLink>
             )}
