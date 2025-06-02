@@ -16,6 +16,10 @@ import debounce from "debounce-promise";
 import SkeletonComponent from "@/components/fragments/Skeleton";
 import moment from "moment";
 import PaginationComponent from "@/components/ui/Pagination/index";
+import { DatePickerWithRange } from "@/components/ui/DateRange";
+import { DateRange } from "react-day-picker";
+import { X } from "lucide-react";
+import Button from "@/components/ui/Button/index";
 
 type PropTypes = {
   _id: string;
@@ -39,15 +43,24 @@ export default function TalentsPage() {
   const [skeletonCount, setSkeletonCount] = useState<number>(5);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [date, setDate] = useState<DateRange | undefined>();
 
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("token") || "");
     const getTransactionsAPI = async () => {
       setLoading(true);
-      const params = {
+      let params;
+
+      params = {
         page: currentPage,
         limit: 10,
+        startDate:
+          date?.from || date?.to !== undefined
+            ? moment(date?.from).format("YYYY-MM-DD")
+            : "",
+        endDate: date?.to ? moment(date?.to).format("YYYY-MM-DD") : "",
       };
+
       try {
         const response = await debouncedGetData(`/cms/orders`, params, token);
 
@@ -62,14 +75,28 @@ export default function TalentsPage() {
     };
 
     getTransactionsAPI();
-  }, [debouncedGetData, currentPage]);
+  }, [debouncedGetData, currentPage, date]);
 
   return (
     <div className="max-w-7xl mx-auto my-10">
       <Breadcrumbs textSecond="Transactions" />
 
       <div className="mb-5 mt-10">
-        <div className="w-full flex justify-between items-center"></div>
+        <div className="w-full flex items-center gap-3">
+          <DatePickerWithRange date={date} setDate={setDate} />
+          {date?.from !== undefined && date?.to !== undefined && (
+            <Button
+              type="button"
+              classname="bg-red-500 hover:bg-red-600 w-fit"
+              onClick={() => {
+                setDate({ from: undefined, to: undefined });
+                setCurrentPage(1);
+              }}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
 
         <Table className="my-5">
           <TableCaption>A list of talents event.</TableCaption>
