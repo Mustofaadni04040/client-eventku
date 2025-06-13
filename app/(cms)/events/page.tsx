@@ -41,7 +41,7 @@ export default function EventsPage() {
   const role = useSelector((state: any) => state.auth.role);
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<TypeModal>(null);
-  const [selectedEvent, setSelectedEvent] = useState<EventType>();
+  const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
 
   useEffect(() => {
     const getEventsAPI = async () => {
@@ -186,7 +186,7 @@ export default function EventsPage() {
         <ModalUpdateEvent
           openModal={openModal}
           setOpenModal={setOpenModal}
-          selectedEvent={selectedEvent!}
+          selectedEvent={selectedEvent}
           loading={loading}
           setLoading={setLoading}
           setData={setDataEvents}

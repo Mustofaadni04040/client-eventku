@@ -26,7 +26,7 @@ export default function ModalUpdateEvent({
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedEvent: EventType;
+  selectedEvent: EventType | null;
   setData: React.Dispatch<React.SetStateAction<any>>;
 }) {
   const { setToaster } = useContext(ToasterContext);

@@ -19,7 +19,7 @@ export default function ModalDeleteEvent({
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  selectedEvent: EventType | undefined;
+  selectedEvent: EventType | null;
   setData: React.Dispatch<React.SetStateAction<any>>;
   data: any;
 }) {
