@@ -123,6 +123,7 @@ export default function EventsPage() {
               <TableHead>Date</TableHead>
               <TableHead>Venue</TableHead>
               <TableHead>Category</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead>Talent</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
@@ -142,6 +143,17 @@ export default function EventsPage() {
                     <TableCell>{formatDate(item?.date, true)}</TableCell>
                     <TableCell>{item?.venueName}</TableCell>
                     <TableCell>{item?.category?.name}</TableCell>
+                    <TableCell>
+                      <p
+                        className={`${
+                          item?.statusEvent === "Published"
+                            ? "bg-green-500 text-white"
+                            : "bg-red-500 text-white"
+                        } flex justify-center font-bold p-1 rounded-full`}
+                      >
+                        {item?.statusEvent}
+                      </p>
+                    </TableCell>
                     <TableCell>{item?.talent?.name}</TableCell>
                     <TableCell className="text-right flex justify-end">
                       <div className="flex items-center gap-3">
