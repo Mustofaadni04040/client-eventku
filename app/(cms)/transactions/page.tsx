@@ -54,10 +54,7 @@ export default function TalentsPage() {
       params = {
         page: currentPage,
         limit: 10,
-        startDate:
-          date?.from 
-            ? moment(date?.from).format("YYYY-MM-DD")
-            : "",
+        startDate: date?.from ? moment(date?.from).format("YYYY-MM-DD") : "",
         endDate: date?.to ? moment(date?.to).format("YYYY-MM-DD") : "",
       };
 
@@ -66,7 +63,7 @@ export default function TalentsPage() {
 
         setData(response?.data?.data?.order);
         setSkeletonCount(response?.data?.data?.order?.length);
-        setTotalPages(response?.data?.data?.pages);
+        setTotalPages(response?.data?.data?.pages); // set total page from response be
       } catch (error) {
         console.log(error);
       } finally {

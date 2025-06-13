@@ -77,7 +77,7 @@ export default function EventForm({ form, dataCategories, dataTalents }: any) {
             type="text"
             placeholder={`Masukkan Key Point ${index + 1}`}
           />
-
+          {/* Hapus key point logic*/}
           {index > 0 && (
             <Button
               type="button"
@@ -90,6 +90,7 @@ export default function EventForm({ form, dataCategories, dataTalents }: any) {
           )}
         </div>
       ))}
+      {/* Tambah key point logic*/}
       <Button
         type="button"
         onClick={() => handlePlusKeyPoint(form)}
@@ -143,6 +144,7 @@ export default function EventForm({ form, dataCategories, dataTalents }: any) {
               placeholder="Masukkan harga tiket"
             />
           </div>
+          {/* Hapus tiket logic */}
           {index > 0 && (
             <Button
               type="button"
@@ -155,6 +157,7 @@ export default function EventForm({ form, dataCategories, dataTalents }: any) {
           )}
         </div>
       ))}
+      {/* Tambah tiket logic */}
       <Button
         type="button"
         onClick={() => handlePlusTicket(form)}
