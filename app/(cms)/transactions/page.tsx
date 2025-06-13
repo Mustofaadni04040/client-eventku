@@ -55,7 +55,7 @@ export default function TalentsPage() {
         page: currentPage,
         limit: 10,
         startDate:
-          date?.from || date?.to !== undefined
+          date?.from 
             ? moment(date?.from).format("YYYY-MM-DD")
             : "",
         endDate: date?.to ? moment(date?.to).format("YYYY-MM-DD") : "",
