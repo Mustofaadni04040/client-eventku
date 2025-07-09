@@ -1,7 +1,6 @@
 "use client";
 
 import Breadcrumbs from "@/components/fragments/Breadcrumb";
-import STable from "@/components/fragments/Table";
 import Button from "@/components/ui/Button/index";
 import React from "react";
 
@@ -12,13 +11,10 @@ export default function DashboardPage() {
 
       <div className="my-5">
         <div className="w-full flex justify-between items-center mb-5">
-          <h1 className="text-2xl font-medium">Dashboard</h1>
-          <Button type="button" classname="bg-primary hover:bg-primary/90">
-            Tambah
-          </Button>
+          <h1 className="text-2xl font-medium">
+            Selamat Datang di Dashboard Eventku
+          </h1>
         </div>
-
-        <STable />
       </div>
     </div>
   );
