@@ -57,6 +57,14 @@ export default function SigninPage() {
           "role",
           JSON.stringify(response?.data?.data?.role)
         );
+        localStorage.setItem(
+          "refreshToken",
+          JSON.stringify(response?.data?.data?.refreshToken)
+        );
+        localStorage.setItem(
+          "email",
+          JSON.stringify(response?.data?.data?.email)
+        );
 
         dispatch(setEmail(response?.data?.data?.email));
         dispatch(setRefreshToken(response?.data?.data?.refreshToken));
