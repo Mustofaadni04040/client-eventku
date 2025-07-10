@@ -3,7 +3,7 @@
 import Image from "next/image";
 import React from "react";
 import NavLink from "../ui/NavLink/NavLink";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   accessCategories,
   accessEvents,
@@ -17,12 +17,17 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { usePathname } from "next/navigation";
 import { isHasAccess } from "@/utils/hasAccess";
+import { setEmail, setRefreshToken, setToken } from "@/redux/auth/authSlice";
 
 export default function Navbar() {
   const { role, token } = useSelector((state: any) => state.auth);
   const pathname = usePathname();
+  const dispatch = useDispatch();
 
   const handleSignOut = () => {
+    dispatch(setToken(null));
+    dispatch(setRefreshToken(null));
+    dispatch(setEmail(null));
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     window.location.href = "/auth/signin";

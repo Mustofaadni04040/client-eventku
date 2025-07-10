@@ -9,7 +9,15 @@ export default function WithAuth({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    const protectedRoute = ["/dashboard", "/categories"];
+    const protectedRoute = [
+      "/dashboard",
+      "/categories",
+      "/events",
+      "/transactions",
+      "/payments",
+      "/talents",
+      "/participants",
+    ]; // protected routes if user not logged in
     const token = localStorage.getItem("token");
     if (!token && protectedRoute.some((route) => pathname.startsWith(route))) {
       router.replace("/auth/signin");

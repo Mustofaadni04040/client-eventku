@@ -1,7 +1,6 @@
 "use client";
 
 import Breadcrumbs from "@/components/fragments/Breadcrumb";
-import Button from "@/components/ui/Button/index";
 import React from "react";
 
 export default function DashboardPage() {

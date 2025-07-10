@@ -10,7 +10,12 @@ import FormInput from "@/components/ui/FormField";
 import AuthLayout from "@/components/layout/authLayout";
 import { postData } from "@/utils/fetch";
 import { useDispatch } from "react-redux";
-import { setRole, setToken } from "@/redux/auth/authSlice";
+import {
+  setEmail,
+  setRefreshToken,
+  setRole,
+  setToken,
+} from "@/redux/auth/authSlice";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -41,7 +46,8 @@ export default function SigninPage() {
         password: values.password,
       });
 
-      //jangan lupa kasih response jika not ok dan response undefined
+      console.log(response);
+
       if (response?.status === 200) {
         localStorage.setItem(
           "token",
@@ -52,6 +58,8 @@ export default function SigninPage() {
           JSON.stringify(response?.data?.data?.role)
         );
 
+        dispatch(setEmail(response?.data?.data?.email));
+        dispatch(setRefreshToken(response?.data?.data?.refreshToken));
         dispatch(setToken(response?.data?.data?.token));
         dispatch(setRole(response?.data?.data?.role));
 
