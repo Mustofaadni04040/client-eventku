@@ -17,7 +17,13 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { usePathname } from "next/navigation";
 import { isHasAccess } from "@/utils/hasAccess";
-import { setEmail, setRefreshToken, setToken } from "@/redux/auth/authSlice";
+import {
+  setEmail,
+  setRefreshToken,
+  setRole,
+  setToken,
+} from "@/redux/auth/authSlice";
+import { clearAuth } from "@/utils/authStorage";
 
 export default function Navbar() {
   const { role, token } = useSelector((state: any) => state.auth);
@@ -28,8 +34,8 @@ export default function Navbar() {
     dispatch(setToken(null));
     dispatch(setRefreshToken(null));
     dispatch(setEmail(null));
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
+    dispatch(setRole(null));
+    clearAuth();
     window.location.href = "/auth/signin";
   };
 
