@@ -13,13 +13,15 @@ import { postData } from "@/utils/fetch";
 import { uploadImage } from "@/utils/uploadImage";
 import { paymentFormSchema } from "@/utils/formSchema";
 import PaymentForm from "@/components/fragments/payment/PaymentForm";
+import { getAuth } from "@/utils/authStorage";
 
 export default function CreateTalentsPage() {
   const { setToaster } = useContext(ToasterContext);
   const [error, setError] = useState<string>("");
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const token = JSON.parse(localStorage.getItem("token") || "");
+  const { token } = getAuth();
+  const safeToken = token || "";
   const form = useForm<z.infer<typeof paymentFormSchema>>({
     resolver: zodResolver(paymentFormSchema),
     defaultValues: {
@@ -43,7 +45,12 @@ export default function CreateTalentsPage() {
         return;
       }
 
-      const imageRes = await uploadImage(file, token, "/cms/images", "avatar");
+      const imageRes = await uploadImage(
+        file,
+        safeToken,
+        "/cms/images",
+        "avatar"
+      );
       const imageId = imageRes?.data?.data?._id;
 
       const payload = {
