@@ -5,6 +5,7 @@ import { ToasterContext } from "@/context/ToasterContext";
 import Modal from "@/components/layout/modalLayout";
 import Button from "@/components/ui/Button/index";
 import { EventType } from "@/types/events.type";
+import { getAuth } from "@/utils/authStorage";
 
 export default function ModalDeleteEvent({
   openModal,
@@ -29,7 +30,7 @@ export default function ModalDeleteEvent({
     setLoading(true);
 
     try {
-      const token = JSON.parse(localStorage.getItem("token") || "");
+      const { token } = getAuth();
       const res = await deleteData(`/cms/events/${selectedEvent?._id}`, token);
 
       if (res?.status === 200) {
