@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/ui/Button/index";
 import { useRouter } from "next/navigation";
+import { getAuth } from "@/utils/authStorage";
 
 export default function AuthLayout({
   form,
@@ -12,16 +13,13 @@ export default function AuthLayout({
   loading,
   error,
   textButton,
-  textLink,
-  textForm,
   textTitle,
 }: any) {
   const [redirect, setRedirect] = useState<boolean>(true);
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log(token);
+    const { token } = getAuth();
     if (token && token !== "undefined" && token !== "null") {
       router.push("/dashboard");
     } else {
