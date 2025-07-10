@@ -13,6 +13,7 @@ import moment from "moment";
 import EventForm from "./EventForm";
 import Modal from "@/components/layout/modalLayout";
 import Button from "../../ui/Button/index";
+import { getAuth } from "@/utils/authStorage";
 
 export default function ModalUpdateEvent({
   openModal,
@@ -30,7 +31,8 @@ export default function ModalUpdateEvent({
   setData: React.Dispatch<React.SetStateAction<any>>;
 }) {
   const { setToaster } = useContext(ToasterContext);
-  const token = JSON.parse(localStorage.getItem("token") || "");
+  const { token } = getAuth();
+  const safeToken = token || "";
   const [dataCategories, setDataCategories] = useState<
     { value: string; label: string }[]
   >([]);
@@ -111,7 +113,7 @@ export default function ModalUpdateEvent({
 
         const imageRes = await uploadImage(
           file,
-          token,
+          safeToken,
           "/cms/images",
           "avatar"
         );
@@ -201,7 +203,7 @@ export default function ModalUpdateEvent({
   useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const token = JSON.parse(localStorage.getItem("token") || "");
+        const { token } = getAuth();
         const [categoriesResponse, talentsResponse] = await Promise.all([
           fetchOptions(`/cms/categories`, token),
           fetchOptions(`/cms/talents`, token),
