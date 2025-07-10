@@ -25,6 +25,7 @@ import SkeletonComponent from "@/components/fragments/Skeleton";
 import Filter from "@/components/fragments/Filter/Filter";
 import ModalUpdateEvent from "@/components/fragments/Events/ModalUpdateEvent";
 import ModalDeleteEvent from "@/components/fragments/Events/ModalDeleteEvent";
+import { getAuth } from "@/utils/authStorage";
 
 type TypeModal = "edit" | "delete" | null;
 
@@ -47,7 +48,7 @@ export default function EventsPage() {
     const getEventsAPI = async () => {
       setLoading(true);
       try {
-        const token = JSON.parse(localStorage.getItem("token") || "");
+        const { token } = getAuth();
         let params = {
           keyword: keyword || "",
           category: keywordCategory || "",
