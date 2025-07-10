@@ -11,6 +11,7 @@ import { categoryFormSchema } from "@/utils/formSchema";
 import CategoriesForm from "./CategoriesForm";
 import Modal from "@/components/layout/modalLayout";
 import Button from "../../ui/Button/index";
+import { getAuth } from "@/utils/authStorage";
 
 export default function ModalUpdateCategories({
   openModal,
@@ -39,7 +40,7 @@ export default function ModalUpdateCategories({
     setLoading(true);
 
     try {
-      const token = JSON.parse(localStorage.getItem("token") || "");
+      const { token } = getAuth();
       const res = await putData(
         `/cms/categories/${selectedCategories?._id}`,
         { name: values.name },
