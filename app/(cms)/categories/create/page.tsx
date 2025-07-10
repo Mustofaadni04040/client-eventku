@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { postData } from "@/utils/fetch";
 import { categoryFormSchema } from "@/utils/formSchema";
 import CategoriesForm from "@/components/fragments/Categories/CategoriesForm";
+import { getAuth } from "@/utils/authStorage";
 
 export default function CreateCategoriesPage() {
   const { setToaster } = useContext(ToasterContext);
@@ -29,7 +30,7 @@ export default function CreateCategoriesPage() {
   async function onSubmit(values: z.infer<typeof categoryFormSchema>) {
     setLoading(true);
     try {
-      const token = JSON.parse(localStorage.getItem("token") || "");
+      const { token } = getAuth();
       const response = await postData(
         `/cms/categories`,
         {
