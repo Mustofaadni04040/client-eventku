@@ -16,6 +16,7 @@ import {
   setRole,
   setToken,
 } from "@/redux/auth/authSlice";
+import { setAuth } from "@/utils/authStorage";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -49,22 +50,12 @@ export default function SigninPage() {
       console.log(response);
 
       if (response?.status === 200) {
-        localStorage.setItem(
-          "token",
-          JSON.stringify(response?.data?.data?.token)
-        );
-        localStorage.setItem(
-          "role",
-          JSON.stringify(response?.data?.data?.role)
-        );
-        localStorage.setItem(
-          "refreshToken",
-          JSON.stringify(response?.data?.data?.refreshToken)
-        );
-        localStorage.setItem(
-          "email",
-          JSON.stringify(response?.data?.data?.email)
-        );
+        setAuth({
+          token: response?.data?.data?.token,
+          refreshToken: response?.data?.data?.refreshToken,
+          email: response?.data?.data?.email,
+          role: response?.data?.data?.role,
+        });
 
         dispatch(setEmail(response?.data?.data?.email));
         dispatch(setRefreshToken(response?.data?.data?.refreshToken));
