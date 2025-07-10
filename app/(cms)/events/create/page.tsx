@@ -15,12 +15,13 @@ import { eventFormSchema } from "@/utils/formSchema";
 import { CategoryType, TalentType } from "@/types/events.type";
 import moment from "moment";
 import EventForm from "@/components/fragments/Events/EventForm";
+import { getAuth } from "@/utils/authStorage";
 
 export default function CreateEventsPage() {
   const { setToaster } = useContext(ToasterContext);
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const token = JSON.parse(localStorage.getItem("token") || "");
+  const { token } = getAuth();
   const [dataCategories, setDataCategories] = useState<CategoryType[]>([]);
   const [dataTalents, setDataTalents] = useState<TalentType[]>([]);
   const form = useForm<z.infer<typeof eventFormSchema>>({
@@ -52,6 +53,7 @@ export default function CreateEventsPage() {
     try {
       const file = values.image[0];
       const sizeMB = file.size / 1024 / 1024;
+      const safeToken = token || "";
 
       if (sizeMB > 3) {
         setToaster({
@@ -62,7 +64,12 @@ export default function CreateEventsPage() {
         return;
       }
 
-      const imageRes = await uploadImage(file, token, "/cms/images", "avatar");
+      const imageRes = await uploadImage(
+        file,
+        safeToken,
+        "/cms/images",
+        "avatar"
+      );
       const imageId = imageRes?.data?.data?._id;
 
       const payload = {
@@ -100,7 +107,7 @@ export default function CreateEventsPage() {
   useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const token = JSON.parse(localStorage.getItem("token") || "");
+        const { token } = getAuth();
         const [categoriesResponse, talentsResponse] = await Promise.all([
           fetchOptions(`/cms/categories`, token),
           fetchOptions(`/cms/talents`, token),

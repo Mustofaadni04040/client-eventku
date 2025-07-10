@@ -71,7 +71,7 @@ export default function EventsPage() {
   useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const token = JSON.parse(localStorage.getItem("token") || "");
+        const { token } = getAuth();
         const [categoriesResponse, talentsResponse] = await Promise.all([
           fetchOptions(`/cms/categories`, token),
           fetchOptions(`/cms/talents`, token),

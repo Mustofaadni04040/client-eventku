@@ -10,7 +10,7 @@ export async function getData(url: string, params?: any, token?: string) {
   });
 }
 
-export async function fetchOptions(url: string, token: string) {
+export async function fetchOptions(url: string, token?: string) {
   const response = await fetch(`${config.api_host_dev}${url}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -49,7 +49,7 @@ export async function putData(url: string, payload: any, token?: string) {
   });
 }
 
-export async function deleteData(url: string, token: string) {
+export async function deleteData(url: string, token?: string) {
   return await axios.delete(`${config.api_host_dev}${url}`, {
     headers: {
       Authorization: `Bearer ${token}`,
