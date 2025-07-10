@@ -23,6 +23,7 @@ import { config } from "@/configs";
 import SkeletonComponent from "@/components/fragments/Skeleton";
 import ModalUpdatePayment from "@/components/fragments/payment/ModalUpdatePayment";
 import ModalDeletePayment from "@/components/fragments/payment/ModalDeletePayment";
+import { getAuth } from "@/utils/authStorage";
 
 type PropTypes = {
   _id: string;
@@ -47,7 +48,7 @@ export default function PaymentsPage() {
   } | null>(null);
 
   useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token") || "");
+    const { token } = getAuth();
     const getPaymentsAPI = async () => {
       setLoading(true);
       try {
