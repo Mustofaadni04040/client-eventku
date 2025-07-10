@@ -5,6 +5,7 @@ import { ToasterContext } from "@/context/ToasterContext";
 import { ModalPayments } from "@/types/modalPayments.type";
 import Modal from "@/components/layout/modalLayout";
 import Button from "../../ui/Button/index";
+import { getAuth } from "@/utils/authStorage";
 
 export default function ModalDeletePayment({
   openModal,
@@ -21,7 +22,7 @@ export default function ModalDeletePayment({
     setLoading(true);
 
     try {
-      const token = JSON.parse(localStorage.getItem("token") || "");
+      const { token } = getAuth();
       const res = await deleteData(
         `/cms/payments/${selectedPayment?._id}`,
         token
