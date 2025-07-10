@@ -21,6 +21,7 @@ import { isHasAccess } from "@/utils/hasAccess";
 import SkeletonComponent from "@/components/fragments/Skeleton";
 import ModalUpdateCategories from "@/components/fragments/Categories/ModalUpdateCategories";
 import ModalDeleteCategories from "@/components/fragments/Categories/ModalDeleteCategories";
+import { getAuth } from "@/utils/authStorage";
 
 type PropTypes = {
   _id: string;
@@ -43,7 +44,7 @@ export default function CategoriesPage() {
   } | null>(null);
 
   useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token") || "");
+    const { token } = getAuth();
     const getCategoriesAPI = async () => {
       setLoading(true);
       try {
