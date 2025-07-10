@@ -12,6 +12,7 @@ import { paymentFormSchema } from "@/utils/formSchema";
 import PaymentForm from "./PaymentForm";
 import Modal from "@/components/layout/modalLayout";
 import { Form } from "@/components/ui/form";
+import { getAuth } from "@/utils/authStorage";
 
 export default function ModalUpdatePayment({
   openModal,
@@ -23,7 +24,8 @@ export default function ModalUpdatePayment({
 }: ModalPayments) {
   const { setToaster } = useContext(ToasterContext);
   const [error, setError] = useState<string>("");
-  const token = JSON.parse(localStorage.getItem("token") || "");
+  const { token } = getAuth();
+  const safeToken = token || "";
   const form = useForm<z.infer<typeof paymentFormSchema>>({
     resolver: zodResolver(paymentFormSchema),
     defaultValues: {
@@ -61,7 +63,7 @@ export default function ModalUpdatePayment({
         }
         const imageRes = await uploadImage(
           file,
-          token,
+          safeToken,
           "/cms/images",
           "avatar"
         );
