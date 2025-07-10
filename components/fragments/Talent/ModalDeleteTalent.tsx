@@ -5,6 +5,7 @@ import { ToasterContext } from "@/context/ToasterContext";
 import { ModalTalents } from "@/types/modalTalents.type";
 import Modal from "@/components/layout/modalLayout";
 import Button from "@/components/ui/Button/index";
+import { getAuth } from "@/utils/authStorage";
 
 export default function ModalDeleteTalent({
   openModal,
@@ -21,7 +22,7 @@ export default function ModalDeleteTalent({
     setLoading(true);
 
     try {
-      const token = JSON.parse(localStorage.getItem("token") || "");
+      const { token } = getAuth();
       const res = await deleteData(
         `/cms/talents/${selectedTalent?._id}`,
         token
