@@ -5,6 +5,7 @@ import { ToasterContext } from "@/context/ToasterContext";
 import { ModalCategories } from "@/types/modalCategories.type";
 import Modal from "@/components/layout/modalLayout";
 import Button from "@/components/ui/Button/index";
+import { getAuth } from "@/utils/authStorage";
 
 export default function ModalDeleteCategories({
   openModal,
@@ -21,7 +22,7 @@ export default function ModalDeleteCategories({
     setLoading(true);
 
     try {
-      const token = JSON.parse(localStorage.getItem("token") || "");
+      const { token } = getAuth();
       const res = await deleteData(
         `/cms/categories/${selectedCategories?._id}`,
         token
