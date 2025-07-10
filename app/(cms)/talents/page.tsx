@@ -25,6 +25,7 @@ import SkeletonComponent from "@/components/fragments/Skeleton";
 import Filter from "@/components/fragments/Filter/Filter";
 import ModalUpdateTalent from "@/components/fragments/Talent/ModalUpdateTalent";
 import ModalDeleteTalent from "@/components/fragments/Talent/ModalDeleteTalent";
+import { getAuth } from "@/utils/authStorage";
 
 type PropTypes = {
   _id: string;
@@ -52,7 +53,7 @@ export default function TalentsPage() {
   } | null>(null);
 
   useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token") || "");
+    const { token } = getAuth();
     const getTalentsAPI = async () => {
       setLoading(true);
       try {
