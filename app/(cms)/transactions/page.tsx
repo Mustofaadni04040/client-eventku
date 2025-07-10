@@ -20,6 +20,7 @@ import { DatePickerWithRange } from "@/components/ui/DateRange";
 import { DateRange } from "react-day-picker";
 import { X } from "lucide-react";
 import Button from "@/components/ui/Button/index";
+import { getAuth } from "@/utils/authStorage";
 
 type PropTypes = {
   _id: string;
@@ -46,7 +47,7 @@ export default function TalentsPage() {
   const [date, setDate] = useState<DateRange | undefined>();
 
   useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token") || "");
+    const { token } = getAuth();
     const getTransactionsAPI = async () => {
       setLoading(true);
       let params;
