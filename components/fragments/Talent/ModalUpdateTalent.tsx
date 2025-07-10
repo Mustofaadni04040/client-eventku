@@ -12,6 +12,7 @@ import { uploadImage } from "@/utils/uploadImage";
 import { ModalTalents } from "@/types/modalTalents.type";
 import { talentFormSchema } from "@/utils/formSchema";
 import TalentForm from "./TalentForm";
+import { getAuth } from "@/utils/authStorage";
 
 export default function ModalUpdateTalent({
   openModal,
@@ -23,7 +24,8 @@ export default function ModalUpdateTalent({
 }: ModalTalents) {
   const { setToaster } = useContext(ToasterContext);
   const [error, setError] = useState<string>("");
-  const token = JSON.parse(localStorage.getItem("token") || "");
+  const { token } = getAuth();
+  const safeToken = token || "";
   const form = useForm<z.infer<typeof talentFormSchema>>({
     resolver: zodResolver(talentFormSchema),
     defaultValues: {
@@ -62,7 +64,7 @@ export default function ModalUpdateTalent({
 
         const imageRes = await uploadImage(
           file,
-          token,
+          safeToken,
           "/cms/images",
           "avatar"
         );
