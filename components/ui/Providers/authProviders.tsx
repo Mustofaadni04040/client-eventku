@@ -1,6 +1,7 @@
 "use client";
 
 import { setRole, setToken } from "@/redux/auth/authSlice";
+import { getAuth } from "@/utils/authStorage";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
@@ -13,11 +14,7 @@ export default function AuthProvider({
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      const roleLocalStorage = localStorage.getItem("role");
-      const role = roleLocalStorage
-        ? JSON.parse(roleLocalStorage) 
-        : null;
+      const { token, role } = getAuth();
 
       if (token && role) {
         dispatch(setToken(token));
