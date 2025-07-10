@@ -67,12 +67,6 @@ export default function AuthLayout({
           >
             {textButton}
           </Button>
-          <p className="text-center text-sm">
-            {textForm}{" "}
-            <Link href="/auth/signup" className="text-primary">
-              {textLink}
-            </Link>
-          </p>
         </form>
       </Form>
     </div>

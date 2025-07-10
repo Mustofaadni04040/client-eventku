@@ -1,5 +1,6 @@
 "use client";
 
+import { getAuth } from "@/utils/authStorage";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -18,7 +19,7 @@ export default function WithAuth({ children }: { children: React.ReactNode }) {
       "/talents",
       "/participants",
     ]; // protected routes if user not logged in
-    const token = localStorage.getItem("token");
+    const { token } = getAuth();
     if (!token && protectedRoute.some((route) => pathname.startsWith(route))) {
       router.replace("/auth/signin");
     } else {
