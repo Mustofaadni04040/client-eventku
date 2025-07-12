@@ -24,7 +24,7 @@ export default function Breadcrumbs({
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <Link href="/dashboard">Home</Link>
+          <Link href="/">Home</Link>
         </BreadcrumbItem>
         {!textThird && (
           <>

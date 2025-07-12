@@ -11,7 +11,6 @@ export default function WithAuth({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const protectedRoute = [
-      "/dashboard",
       "/categories",
       "/events",
       "/transactions",

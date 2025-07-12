@@ -11,7 +11,7 @@ export async function getData(url: string, params?: any, token?: string) {
       },
     });
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 }
 
@@ -31,7 +31,7 @@ export async function fetchOptions(url: string, token?: string) {
       // target: { value: item._id },
     }));
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 }
 
@@ -50,7 +50,7 @@ export async function postData(
       },
     });
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 }
 
@@ -62,7 +62,7 @@ export async function putData(url: string, payload: any, token?: string) {
       },
     });
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 }
 
@@ -74,6 +74,6 @@ export async function deleteData(url: string, token?: string) {
       },
     });
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 }

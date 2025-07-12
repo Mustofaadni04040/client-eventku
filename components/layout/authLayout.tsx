@@ -21,7 +21,7 @@ export default function AuthLayout({
   useEffect(() => {
     const { token } = getAuth();
     if (token && token !== "undefined" && token !== "null") {
-      router.push("/dashboard");
+      router.push("/");
     } else {
       setRedirect(false);
     }

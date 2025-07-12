@@ -15,7 +15,7 @@ import {
 import Button from "../ui/Button/index";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { PopoverClose } from "@radix-ui/react-popover";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { isHasAccess } from "@/utils/hasAccess";
 import {
   setEmail,
@@ -29,14 +29,15 @@ export default function Navbar() {
   const { role, token } = useSelector((state: any) => state.auth);
   const pathname = usePathname();
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const handleSignOut = () => {
+    router.replace("/auth/signin");
     dispatch(setToken(null));
     dispatch(setRefreshToken(null));
     dispatch(setEmail(null));
     dispatch(setRole(null));
     clearAuth();
-    window.location.href = "/auth/signin";
   };
 
   if (pathname.startsWith("/auth")) {

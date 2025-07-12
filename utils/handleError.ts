@@ -9,18 +9,15 @@ const handleError = (error: any) => {
     const session = getAuth();
 
     return axios
-      .get(`${config.api_host_dev}/cms/refresh-token/${session.refreshToken}`)
+      .get(
+        `${config.api_host_dev}/cms/refresh-token/${session.refreshToken}/${session.email}`
+      )
       .then((res) => {
-        console.log("res");
-        console.log(res);
         setAuth({
           ...session,
           token: res.data.data.token,
         });
         originalRequest.headers.Authorization = `Bearer ${res.data.data.token}`;
-
-        console.log("originalRequest");
-        console.log(originalRequest);
 
         return axios(originalRequest);
       })

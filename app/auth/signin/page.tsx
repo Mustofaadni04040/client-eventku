@@ -41,41 +41,36 @@ export default function SigninPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    try {
-      const response = await postData("/cms/auth/signin", {
-        email: values.email,
-        password: values.password,
+    const response = await postData("/cms/auth/signin", {
+      email: values.email,
+      password: values.password,
+    });
+
+    if (response?.status === 200) {
+      router.push("/");
+      setAuth({
+        token: response?.data?.data?.token,
+        refreshToken: response?.data?.data?.refreshToken,
+        email: response?.data?.data?.email,
+        role: response?.data?.data?.role,
       });
 
-      console.log(response);
+      dispatch(setEmail(response?.data?.data?.email));
+      dispatch(setRefreshToken(response?.data?.data?.refreshToken));
+      dispatch(setToken(response?.data?.data?.token));
+      dispatch(setRole(response?.data?.data?.role));
 
-      if (response?.status === 200) {
-        setAuth({
-          token: response?.data?.data?.token,
-          refreshToken: response?.data?.data?.refreshToken,
-          email: response?.data?.data?.email,
-          role: response?.data?.data?.role,
-        });
-
-        dispatch(setEmail(response?.data?.data?.email));
-        dispatch(setRefreshToken(response?.data?.data?.refreshToken));
-        dispatch(setToken(response?.data?.data?.token));
-        dispatch(setRole(response?.data?.data?.role));
-
-        router.push("/dashboard");
-        setToaster({
-          variant: "success",
-          message: "Login Success",
-        });
-      }
-    } catch (error: any) {
-      console.log(error);
-      setError(error?.response?.data?.msg || "Internal Server Error");
+      setToaster({
+        variant: "success",
+        message: "Login Success",
+      });
+    } else {
+      console.log("error", error);
+      setError(response?.response?.data?.msg ?? "Internal Server Error");
       setToaster({
         variant: "danger",
-        message: error?.response?.data?.msg || "Internal Server Error",
+        message: response?.response?.data?.msg ?? "Internal Server Error",
       });
-    } finally {
       setLoading(false);
     }
   }
