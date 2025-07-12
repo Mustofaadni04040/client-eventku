@@ -29,33 +29,31 @@ export default function CreateCategoriesPage() {
 
   async function onSubmit(values: z.infer<typeof categoryFormSchema>) {
     setLoading(true);
-    try {
-      const { token } = getAuth();
-      const response = await postData(
-        `/cms/categories`,
-        {
-          name: values.name,
-        },
-        undefined,
-        token
-      );
+    const { token } = getAuth();
+    const response = await postData(
+      `/cms/categories`,
+      {
+        name: values.name,
+      },
+      undefined,
+      token
+    );
 
-      if (response?.status === 201) {
-        router.push("/categories");
-        setToaster({
-          variant: "success",
-          message: "Kategori berhasil ditambahkan",
-        });
-      }
-    } catch (error: any) {
+    if (response?.status === 201) {
+      setLoading(false);
+      router.push("/categories");
+      setToaster({
+        variant: "success",
+        message: "Kategori berhasil ditambahkan",
+      });
+    } else {
+      setLoading(false);
       console.log(error);
-      setError(error?.response?.data?.msg || "Internal Server Error");
+      setError(response?.response?.data?.msg || "Internal Server Error");
       setToaster({
         variant: "danger",
-        message: error?.response?.data?.msg || "Internal Server Error",
+        message: response?.response?.data?.msg || "Internal Server Error",
       });
-    } finally {
-      setLoading(false);
     }
   }
 
