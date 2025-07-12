@@ -29,33 +29,31 @@ export default function ModalDeleteEvent({
   async function onSubmit() {
     setLoading(true);
 
-    try {
-      const { token } = getAuth();
-      const res = await deleteData(`/cms/events/${selectedEvent?._id}`, token);
+    const { token } = getAuth();
+    const res = await deleteData(`/cms/events/${selectedEvent?._id}`, token);
 
-      if (res?.status === 200) {
-        setOpenModal(false);
-        setData(
-          data &&
-            data.filter(
-              (item: { _id: string; name: string }) =>
-                item._id !== selectedEvent?._id
-            )
-        );
-        setToaster({
-          variant: "success",
-          message: "Event berhasil dihapus",
-        });
-      }
-    } catch (err: any) {
-      console.log(err);
-      setToaster({
-        variant: "danger",
-        message: err?.response?.data?.msg || "Internal Server Error",
-      });
-    } finally {
+    if (res?.status === 200) {
       setLoading(false);
       setOpenModal(false);
+      setData(
+        data &&
+          data.filter(
+            (item: { _id: string; name: string }) =>
+              item._id !== selectedEvent?._id
+          )
+      );
+      setToaster({
+        variant: "success",
+        message: "Event berhasil dihapus",
+      });
+    } else {
+      setLoading(false);
+      setOpenModal(false);
+      console.log(res?.response?.data?.msg);
+      setToaster({
+        variant: "danger",
+        message: res?.response?.data?.msg || "Internal Server Error",
+      });
     }
   }
 

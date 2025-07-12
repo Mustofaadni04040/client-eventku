@@ -94,109 +94,107 @@ export default function ModalUpdateEvent({
   async function onSubmit(values: z.infer<typeof eventFormSchema>) {
     setLoading(true);
 
-    try {
-      const file = values.image?.[0];
-      let imageId: string | undefined;
-      let payload;
+    const file = values.image?.[0];
+    let imageId: string | undefined;
+    let payload;
 
-      if (file) {
-        const sizeMB = file.size / 1024 / 1024;
+    if (file) {
+      const sizeMB = file.size / 1024 / 1024;
 
-        if (sizeMB > 3) {
-          setToaster({
-            variant: "danger",
-            message: "Ukuran file melebihi 3MB",
-          });
-          setLoading(false);
-          return;
-        }
-
-        const imageRes = await uploadImage(
-          file,
-          safeToken,
-          "/cms/images",
-          "avatar"
-        );
-        imageId = imageRes?.data?.data?._id;
-
-        payload = {
-          date: values.date,
-          image: imageId,
-          title: values.title,
-          about: values.about,
-          venueName: values.venueName,
-          tagline: values.tagline,
-          keyPoint: values.keyPoint,
-          category: form.getValues("category"),
-          talent: form.getValues("talent"),
-          statusEvent: values.statusEvent,
-          tickets: values.tickets,
-        };
-      } else {
-        payload = {
-          date: values.date,
-          image: selectedEvent?.image?._id, // use existing image if no new file is uploaded
-          title: values.title,
-          about: values.about,
-          venueName: values.venueName,
-          tagline: values.tagline,
-          keyPoint: values.keyPoint,
-          category: form.getValues("category"),
-          talent: form.getValues("talent"),
-          statusEvent: values.statusEvent,
-          tickets: values.tickets,
-        };
-      }
-
-      const updatedCategory = dataCategories.find(
-        (item) => item.value === form.getValues("category")
-      );
-      const updatedTalent = dataTalents.find(
-        (item) => item.value === form.getValues("talent")
-      );
-      console.log("payload", payload);
-
-      const response = await putData(
-        `/cms/events/${selectedEvent?._id}`,
-        payload,
-        token
-      );
-
-      if (response?.data?.data) {
-        setOpenModal(false);
-        setData((prev: any) =>
-          prev.map((item: EventType) =>
-            item._id === selectedEvent?._id
-              ? {
-                  ...item,
-                  title: values.title,
-                  date: values.date,
-                  venueName: values.venueName,
-                  category: {
-                    _id: form.getValues("category"),
-                    name: updatedCategory?.label,
-                  },
-                  talent: {
-                    _id: form.getValues("talent"),
-                    name: updatedTalent?.label,
-                  },
-                }
-              : item
-          )
-        );
+      if (sizeMB > 3) {
         setToaster({
-          variant: "success",
-          message: "Event berhasil diupdate",
+          variant: "danger",
+          message: "Ukuran file melebihi 3MB",
         });
+        setLoading(false);
+        return;
       }
-    } catch (err: any) {
-      console.log(err);
+
+      const imageRes = await uploadImage(
+        file,
+        safeToken,
+        "/cms/images",
+        "avatar"
+      );
+      imageId = imageRes?.data?.data?._id;
+
+      payload = {
+        date: values.date,
+        image: imageId,
+        title: values.title,
+        about: values.about,
+        venueName: values.venueName,
+        tagline: values.tagline,
+        keyPoint: values.keyPoint,
+        category: form.getValues("category"),
+        talent: form.getValues("talent"),
+        statusEvent: values.statusEvent,
+        tickets: values.tickets,
+      };
+    } else {
+      payload = {
+        date: values.date,
+        image: selectedEvent?.image?._id, // use existing image if no new file is uploaded
+        title: values.title,
+        about: values.about,
+        venueName: values.venueName,
+        tagline: values.tagline,
+        keyPoint: values.keyPoint,
+        category: form.getValues("category"),
+        talent: form.getValues("talent"),
+        statusEvent: values.statusEvent,
+        tickets: values.tickets,
+      };
+    }
+
+    const updatedCategory = dataCategories.find(
+      (item) => item.value === form.getValues("category")
+    );
+    const updatedTalent = dataTalents.find(
+      (item) => item.value === form.getValues("talent")
+    );
+
+    const response = await putData(
+      `/cms/events/${selectedEvent?._id}`,
+      payload,
+      token
+    );
+
+    if (response?.data?.data) {
+      setLoading(false);
+      setOpenModal(false);
+      setData((prev: any) =>
+        prev.map((item: EventType) =>
+          item._id === selectedEvent?._id
+            ? {
+                ...item,
+                title: values.title,
+                date: values.date,
+                venueName: values.venueName,
+                category: {
+                  _id: form.getValues("category"),
+                  name: updatedCategory?.label,
+                },
+                talent: {
+                  _id: form.getValues("talent"),
+                  name: updatedTalent?.label,
+                },
+              }
+            : item
+        )
+      );
+      setToaster({
+        variant: "success",
+        message: "Event berhasil diupdate",
+      });
+    } else {
+      setLoading(false);
+      setOpenModal(false);
+      console.log(response?.response?.data?.msg);
       setToaster({
         variant: "danger",
-        message: err?.response?.data?.msg || "Internal Server Error",
+        message: response?.response?.data?.msg || "Internal Server Error",
       });
-    } finally {
-      setLoading(false);
     }
   }
 
