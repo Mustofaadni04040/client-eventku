@@ -47,21 +47,21 @@ export default function EventsPage() {
   useEffect(() => {
     const getEventsAPI = async () => {
       setLoading(true);
-      try {
-        const { token } = getAuth();
-        let params = {
-          keyword: keyword || "",
-          category: keywordCategory || "",
-          talent: keywordTalent || "",
-        };
-        const response = await debouncedGetData(`/cms/events`, params, token);
+      const { token } = getAuth();
+      let params = {
+        keyword: keyword || "",
+        category: keywordCategory || "",
+        talent: keywordTalent || "",
+      };
+      const response = await debouncedGetData(`/cms/events`, params, token);
 
+      if (response?.status === 200) {
+        setLoading(false);
         setDataEvents(response?.data?.data);
         setSkeletonCount(response?.data?.data?.length);
-      } catch (error) {
-        console.log(error);
-      } finally {
+      } else {
         setLoading(false);
+        console.log(response?.response?.data?.msg);
       }
     };
 
