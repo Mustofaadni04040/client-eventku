@@ -86,8 +86,8 @@ export default function ModalUpdatePayment({
     );
 
     if (response?.status === 200) {
-      setLoading(false);
       setOpenModal(false);
+      setLoading(false);
       setData((prev: any) =>
         prev.map(
           (item: {
@@ -112,8 +112,8 @@ export default function ModalUpdatePayment({
         message: "Payment berhasil diupdate",
       });
     } else {
-      setLoading(false);
       setOpenModal(false);
+      setLoading(false);
       setError(response?.response?.data?.msg || "Internal Server Error");
       setToaster({
         variant: "danger",

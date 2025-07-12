@@ -21,36 +21,33 @@ export default function ModalDeletePayment({
   async function onSubmit() {
     setLoading(true);
 
-    try {
-      const { token } = getAuth();
-      const res = await deleteData(
-        `/cms/payments/${selectedPayment?._id}`,
-        token
-      );
+    const { token } = getAuth();
+    const res = await deleteData(
+      `/cms/payments/${selectedPayment?._id}`,
+      token
+    );
 
-      if (res?.status === 200) {
-        setOpenModal(false);
-        setData(
-          data &&
-            data.filter(
-              (item: { _id: string; type: string }) =>
-                item._id !== selectedPayment?._id
-            )
-        );
-        setToaster({
-          variant: "success",
-          message: "Payment berhasil dihapus",
-        });
-      }
-    } catch (err: any) {
-      console.log(err);
+    if (res?.status === 200) {
+      setOpenModal(false);
+      setLoading(false);
+      setData(
+        data &&
+          data.filter(
+            (item: { _id: string; type: string }) =>
+              item._id !== selectedPayment?._id
+          )
+      );
+      setToaster({
+        variant: "success",
+        message: "Payment berhasil dihapus",
+      });
+    } else {
+      setOpenModal(false);
+      setLoading(false);
       setToaster({
         variant: "danger",
-        message: err?.response?.data?.msg || "Internal Server Error",
+        message: res?.response?.data?.msg || "Internal Server Error",
       });
-    } finally {
-      setLoading(false);
-      setOpenModal(false);
     }
   }
 
