@@ -58,16 +58,15 @@ export default function TalentsPage() {
         startDate: date?.from ? moment(date?.from).format("YYYY-MM-DD") : "",
         endDate: date?.to ? moment(date?.to).format("YYYY-MM-DD") : "",
       };
+      const response = await debouncedGetData(`/cms/orders`, params, token);
 
-      try {
-        const response = await debouncedGetData(`/cms/orders`, params, token);
-
+      if (response?.status === 200) {
+        setLoading(false);
         setData(response?.data?.data?.order);
         setSkeletonCount(response?.data?.data?.order?.length);
         setTotalPages(response?.data?.data?.pages); // set total page from response be
-      } catch (error) {
-        console.log(error);
-      } finally {
+      } else {
+        console.log(response?.response?.data?.msg);
         setLoading(false);
       }
     };
