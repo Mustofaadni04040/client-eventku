@@ -32,54 +32,47 @@ export default function CreateTalentsPage() {
 
   const onSubmit = async (values: z.infer<typeof paymentFormSchema>) => {
     setLoading(true);
-    try {
-      const file = values.image[0];
-      const sizeMB = file.size / 1024 / 1024;
+    const file = values.image[0];
+    const sizeMB = file.size / 1024 / 1024;
 
-      if (sizeMB > 3) {
-        setToaster({
-          variant: "danger",
-          message: "Ukuran file melebihi 3MB",
-        });
-        setLoading(false);
-        return;
-      }
-
-      const imageRes = await uploadImage(
-        file,
-        safeToken,
-        "/cms/images",
-        "avatar"
-      );
-      const imageId = imageRes?.data?.data?._id;
-
-      const payload = {
-        type: values.type,
-        image: imageId,
-      };
-
-      const response = await postData(
-        "/cms/payments",
-        payload,
-        undefined,
-        token
-      );
-
-      if (response?.data?.data) {
-        setToaster({
-          variant: "success",
-          message: `Payment ${response?.data?.data?.type} berhasil ditambahkan`,
-        });
-        router.push("/payments");
-      }
-    } catch (error: any) {
-      setError(error?.response?.data?.msg || "Internal Server Error");
+    if (sizeMB > 3) {
       setToaster({
         variant: "danger",
-        message: error?.response?.data?.msg || "Terjadi kesalahan server",
+        message: "Ukuran file melebihi 3MB",
       });
-    } finally {
       setLoading(false);
+      return;
+    }
+
+    const imageRes = await uploadImage(
+      file,
+      safeToken,
+      "/cms/images",
+      "avatar"
+    );
+    const imageId = imageRes?.data?.data?._id;
+
+    const payload = {
+      type: values.type,
+      image: imageId,
+    };
+
+    const response = await postData("/cms/payments", payload, undefined, token);
+
+    if (response?.data?.data) {
+      setLoading(false);
+      setToaster({
+        variant: "success",
+        message: `Payment ${response?.data?.data?.type} berhasil ditambahkan`,
+      });
+      router.push("/payments");
+    } else {
+      setLoading(false);
+      setError(response?.response?.data?.msg || "Internal Server Error");
+      setToaster({
+        variant: "danger",
+        message: response?.response?.data?.msg || "Terjadi kesalahan server",
+      });
     }
   };
 

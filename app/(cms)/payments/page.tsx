@@ -62,8 +62,8 @@ export default function PaymentsPage() {
         setData(response?.data?.data);
         setSkeletonCount(response?.data?.data?.length);
       } else {
-        console.log(response?.response?.data?.msg);
         setLoading(false);
+        console.log(response?.response?.data?.msg);
       }
     };
 
