@@ -44,83 +44,81 @@ export default function ModalUpdatePayment({
   async function onSubmit(values: z.infer<typeof paymentFormSchema>) {
     setLoading(true);
 
-    try {
-      const file = values?.image?.[0];
-      let payload;
-      let imageId: string | undefined;
-      let imageName: string | undefined;
+    const file = values?.image?.[0];
+    let payload;
+    let imageId: string | undefined;
+    let imageName: string | undefined;
 
-      if (file) {
-        const sizeMB = file.size / 1024 / 1024;
+    if (file) {
+      const sizeMB = file.size / 1024 / 1024;
 
-        if (sizeMB > 3) {
-          setToaster({
-            variant: "danger",
-            message: "Ukuran file melebihi 3MB",
-          });
-          setLoading(false);
-          return;
-        }
-        const imageRes = await uploadImage(
-          file,
-          safeToken,
-          "/cms/images",
-          "avatar"
-        );
-        imageId = imageRes?.data?.data?._id;
-        imageName = imageRes?.data?.data?.name;
-        payload = {
-          type: values.type,
-          image: imageId,
-        };
-      } else {
-        payload = {
-          type: values.type,
-          image: selectedPayment?.image?._id, // use existing image if no new file is uploaded
-        };
-      }
-
-      const response = await putData(
-        `/cms/payments/${selectedPayment?._id}`,
-        payload,
-        token
-      );
-
-      if (response?.data?.data) {
-        setOpenModal(false);
-        setData((prev: any) =>
-          prev.map(
-            (item: {
-              _id: string;
-              type: string;
-              image: { name: string; _id: string };
-            }) =>
-              item._id === selectedPayment?._id
-                ? {
-                    ...item,
-                    type: values.type,
-                    image: {
-                      _id: imageId,
-                      name: imageName || item.image.name, // use new image name if available
-                    },
-                  }
-                : item
-          )
-        );
+      if (sizeMB > 3) {
         setToaster({
-          variant: "success",
-          message: "Payment berhasil diupdate",
+          variant: "danger",
+          message: "Ukuran file melebihi 3MB",
         });
+        setLoading(false);
+        return;
       }
-    } catch (err: any) {
-      console.log(err);
-      setError(err?.response?.data?.msg || "Internal Server Error");
+      const imageRes = await uploadImage(
+        file,
+        safeToken,
+        "/cms/images",
+        "avatar"
+      );
+      imageId = imageRes?.data?.data?._id;
+      imageName = imageRes?.data?.data?.name;
+      payload = {
+        type: values.type,
+        image: imageId,
+      };
+    } else {
+      payload = {
+        type: values.type,
+        image: selectedPayment?.image?._id, // use existing image if no new file is uploaded
+      };
+    }
+
+    const response = await putData(
+      `/cms/payments/${selectedPayment?._id}`,
+      payload,
+      token
+    );
+
+    if (response?.status === 200) {
+      setLoading(false);
+      setOpenModal(false);
+      setData((prev: any) =>
+        prev.map(
+          (item: {
+            _id: string;
+            type: string;
+            image: { name: string; _id: string };
+          }) =>
+            item._id === selectedPayment?._id
+              ? {
+                  ...item,
+                  type: values.type,
+                  image: {
+                    _id: imageId,
+                    name: imageName || item.image.name, // use new image name if available
+                  },
+                }
+              : item
+        )
+      );
+      setToaster({
+        variant: "success",
+        message: "Payment berhasil diupdate",
+      });
+    } else {
+      setLoading(false);
+      setOpenModal(false);
+      setError(response?.response?.data?.msg || "Internal Server Error");
       setToaster({
         variant: "danger",
-        message: err?.response?.data?.msg || "Internal Server Error",
+        message: response?.response?.data?.msg || "Internal Server Error",
       });
-    } finally {
-      setLoading(false);
     }
   }
 
