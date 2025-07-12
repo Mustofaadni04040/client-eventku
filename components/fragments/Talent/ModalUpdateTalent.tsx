@@ -45,88 +45,86 @@ export default function ModalUpdateTalent({
   async function onSubmit(values: z.infer<typeof talentFormSchema>) {
     setLoading(true);
 
-    try {
-      const file = values.image?.[0];
-      let payload;
-      let imageId: string | undefined;
-      let imageName: string | undefined;
+    const file = values.image?.[0];
+    let payload;
+    let imageId: string | undefined;
+    let imageName: string | undefined;
 
-      if (file) {
-        const sizeMB = file.size / 1024 / 1024;
-        if (sizeMB > 3) {
-          setToaster({
-            variant: "danger",
-            message: "Ukuran file melebihi 3MB",
-          });
-          setLoading(false);
-          return;
-        }
-
-        const imageRes = await uploadImage(
-          file,
-          safeToken,
-          "/cms/images",
-          "avatar"
-        );
-        imageId = imageRes?.data?.data?._id;
-        imageName = imageRes?.data?.data?.name;
-
-        payload = {
-          name: values.name,
-          role: values.role,
-          image: imageId,
-        };
-      } else {
-        payload = {
-          name: values.name,
-          role: values.role,
-          image: selectedTalent?.image?._id,
-        };
-      }
-
-      const response = await putData(
-        `/cms/talents/${selectedTalent?._id}`,
-        payload,
-        token
-      );
-
-      if (response?.data?.data) {
-        setOpenModal(false);
-        setData((prev: any) =>
-          prev.map(
-            (item: {
-              _id: string;
-              name: string;
-              role: string;
-              image: { name: string; _id: string };
-            }) =>
-              item._id === selectedTalent?._id
-                ? {
-                    ...item,
-                    name: values.name,
-                    role: values.role,
-                    image: {
-                      _id: imageId,
-                      name: imageName || item.image.name,
-                    },
-                  }
-                : item
-          )
-        );
+    if (file) {
+      const sizeMB = file.size / 1024 / 1024;
+      if (sizeMB > 3) {
         setToaster({
-          variant: "success",
-          message: "Kategori berhasil diupdate",
+          variant: "danger",
+          message: "Ukuran file melebihi 3MB",
         });
+        setLoading(false);
+        return;
       }
-    } catch (err: any) {
-      console.log(err);
-      setError(err?.response?.data?.msg || "Internal Server Error");
+
+      const imageRes = await uploadImage(
+        file,
+        safeToken,
+        "/cms/images",
+        "avatar"
+      );
+      imageId = imageRes?.data?.data?._id;
+      imageName = imageRes?.data?.data?.name;
+
+      payload = {
+        name: values.name,
+        role: values.role,
+        image: imageId,
+      };
+    } else {
+      payload = {
+        name: values.name,
+        role: values.role,
+        image: selectedTalent?.image?._id,
+      };
+    }
+
+    const response = await putData(
+      `/cms/talents/${selectedTalent?._id}`,
+      payload,
+      token
+    );
+
+    if (response?.status === 200) {
+      setOpenModal(false);
+      setLoading(false);
+      setData((prev: any) =>
+        prev.map(
+          (item: {
+            _id: string;
+            name: string;
+            role: string;
+            image: { name: string; _id: string };
+          }) =>
+            item._id === selectedTalent?._id
+              ? {
+                  ...item,
+                  name: values.name,
+                  role: values.role,
+                  image: {
+                    _id: imageId,
+                    name: imageName || item.image.name,
+                  },
+                }
+              : item
+        )
+      );
+      setToaster({
+        variant: "success",
+        message: "Kategori berhasil diupdate",
+      });
+    } else {
+      setOpenModal(false);
+      setLoading(false);
+      setError(response?.response?.data?.msg || "Internal Server Error");
       setToaster({
         variant: "danger",
-        message: err?.response?.data?.msg || "Internal Server Error",
+        message: response?.response?.data?.msg || "Internal Server Error",
       });
-    } finally {
-      setLoading(false);
     }
   }
 
