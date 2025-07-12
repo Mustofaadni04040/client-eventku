@@ -21,36 +21,30 @@ export default function ModalDeleteTalent({
   async function onSubmit() {
     setLoading(true);
 
-    try {
-      const { token } = getAuth();
-      const res = await deleteData(
-        `/cms/talents/${selectedTalent?._id}`,
-        token
-      );
+    const { token } = getAuth();
+    const res = await deleteData(`/cms/talents/${selectedTalent?._id}`, token);
 
-      if (res?.status === 200) {
-        setOpenModal(false);
-        setData(
-          data &&
-            data.filter(
-              (item: { _id: string; name: string }) =>
-                item._id !== selectedTalent?._id
-            )
-        );
-        setToaster({
-          variant: "success",
-          message: "Talent berhasil dihapus",
-        });
-      }
-    } catch (err: any) {
-      console.log(err);
+    if (res?.status === 200) {
+      setOpenModal(false);
+      setLoading(false);
+      setData(
+        data &&
+          data.filter(
+            (item: { _id: string; name: string }) =>
+              item._id !== selectedTalent?._id
+          )
+      );
+      setToaster({
+        variant: "success",
+        message: "Talent berhasil dihapus",
+      });
+    } else {
+      setOpenModal(false);
+      setLoading(false);
       setToaster({
         variant: "danger",
-        message: err?.response?.data?.msg || "Internal Server Error",
+        message: res?.response?.data?.msg || "Internal Server Error",
       });
-    } finally {
-      setLoading(false);
-      setOpenModal(false);
     }
   }
 
