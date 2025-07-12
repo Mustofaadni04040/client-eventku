@@ -51,18 +51,18 @@ export default function PaymentsPage() {
     const { token } = getAuth();
     const getPaymentsAPI = async () => {
       setLoading(true);
-      try {
-        const response = await debouncedGetData(
-          `/cms/payments`,
-          undefined,
-          token
-        );
+      const response = await debouncedGetData(
+        `/cms/payments`,
+        undefined,
+        token
+      );
 
+      if (response?.status === 200) {
+        setLoading(false);
         setData(response?.data?.data);
         setSkeletonCount(response?.data?.data?.length);
-      } catch (error) {
-        console.log(error);
-      } finally {
+      } else {
+        console.log(response?.response?.data?.msg);
         setLoading(false);
       }
     };
