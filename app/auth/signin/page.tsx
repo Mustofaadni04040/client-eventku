@@ -48,6 +48,7 @@ export default function SigninPage() {
 
     if (response?.status === 200) {
       router.push("/");
+      setLoading(false);
       setAuth({
         token: response?.data?.data?.token,
         refreshToken: response?.data?.data?.refreshToken,

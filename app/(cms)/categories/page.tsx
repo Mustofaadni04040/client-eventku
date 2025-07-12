@@ -47,13 +47,14 @@ export default function CategoriesPage() {
     const { token } = getAuth();
     const getCategoriesAPI = async () => {
       setLoading(true);
-      try {
-        const response = await debouncedGetData(`/cms/categories`, null, token);
+      const response = await debouncedGetData(`/cms/categories`, null, token);
+
+      if (response?.status === 200) {
+        setLoading(false);
         setData(response?.data?.data);
         setSkeletonCount(response?.data?.data?.length);
-      } catch (error) {
-        console.log(error);
-      } finally {
+      } else {
+        console.log(response?.response?.data?.msg ?? "Internal Server Error");
         setLoading(false);
       }
     };
