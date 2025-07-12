@@ -56,18 +56,18 @@ export default function TalentsPage() {
     const { token } = getAuth();
     const getTalentsAPI = async () => {
       setLoading(true);
-      try {
-        const response = await debouncedGetData(
-          `/cms/talents`,
-          { keyword },
-          token
-        );
+      const response = await debouncedGetData(
+        `/cms/talents`,
+        { keyword },
+        token
+      );
 
+      if (response?.status === 200) {
+        setLoading(false);
         setData(response?.data?.data);
         setSkeletonCount(response?.data?.data?.length);
-      } catch (error) {
-        console.log(error);
-      } finally {
+      } else {
+        console.log(response?.response?.data?.msg);
         setLoading(false);
       }
     };
