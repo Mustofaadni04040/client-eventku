@@ -50,57 +50,56 @@ export default function CreateEventsPage() {
 
   const onSubmit = async (values: z.infer<typeof eventFormSchema>) => {
     setLoading(true);
-    try {
-      const file = values.image[0];
-      const sizeMB = file.size / 1024 / 1024;
-      const safeToken = token || "";
 
-      if (sizeMB > 3) {
-        setToaster({
-          variant: "danger",
-          message: "Ukuran file melebihi 3MB",
-        });
-        setLoading(false);
-        return;
-      }
+    const file = values.image[0];
+    const sizeMB = file.size / 1024 / 1024;
+    const safeToken = token || "";
 
-      const imageRes = await uploadImage(
-        file,
-        safeToken,
-        "/cms/images",
-        "avatar"
-      );
-      const imageId = imageRes?.data?.data?._id;
-
-      const payload = {
-        date: values.date,
-        image: imageId,
-        title: values.title,
-        about: values.about,
-        venueName: values.venueName,
-        tagline: values.tagline,
-        keyPoint: values.keyPoint,
-        category: form.getValues("category"),
-        talent: form.getValues("talent"),
-        statusEvent: values.statusEvent,
-        tickets: values.tickets,
-      };
-      const response = await postData("/cms/events", payload, undefined, token);
-
-      if (response?.data?.data) {
-        setToaster({
-          variant: "success",
-          message: `Event berhasil ditambahkan`,
-        });
-        router.push("/events");
-      }
-    } catch (error: any) {
+    if (sizeMB > 3) {
       setToaster({
         variant: "danger",
-        message: error?.response?.data?.msg || "Terjadi kesalahan server",
+        message: "Ukuran file melebihi 3MB",
       });
-    } finally {
       setLoading(false);
+      return;
+    }
+
+    const imageRes = await uploadImage(
+      file,
+      safeToken,
+      "/cms/images",
+      "avatar"
+    );
+    const imageId = imageRes?.data?.data?._id;
+
+    const payload = {
+      date: values.date,
+      image: imageId,
+      title: values.title,
+      about: values.about,
+      venueName: values.venueName,
+      tagline: values.tagline,
+      keyPoint: values.keyPoint,
+      category: form.getValues("category"),
+      talent: form.getValues("talent"),
+      statusEvent: values.statusEvent,
+      tickets: values.tickets,
+    };
+    const response = await postData("/cms/events", payload, undefined, token);
+
+    if (response?.data?.data) {
+      setLoading(false);
+      setToaster({
+        variant: "success",
+        message: `Event berhasil ditambahkan`,
+      });
+      router.push("/events");
+    } else {
+      setLoading(false);
+      setToaster({
+        variant: "danger",
+        message: response?.response?.data?.msg || "Terjadi kesalahan server",
+      });
     }
   };
 
@@ -124,7 +123,7 @@ export default function CreateEventsPage() {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto my-10">
       <div className="mt-5 mb-16">
         <Breadcrumbs
           textSecond="events"
