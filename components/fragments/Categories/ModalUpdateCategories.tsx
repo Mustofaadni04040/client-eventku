@@ -39,37 +39,36 @@ export default function ModalUpdateCategories({
   async function onSubmit(values: z.infer<typeof categoryFormSchema>) {
     setLoading(true);
 
-    try {
-      const { token } = getAuth();
-      const res = await putData(
-        `/cms/categories/${selectedCategories?._id}`,
-        { name: values.name },
-        token
-      );
+    const { token } = getAuth();
+    const res = await putData(
+      `/cms/categories/${selectedCategories?._id}`,
+      { name: values.name },
+      token
+    );
 
-      if (res?.data?.data) {
-        setOpenModal(false);
-        setData((prev: any) =>
-          prev.map((item: { _id: string; name: string }) =>
-            item._id === selectedCategories?._id
-              ? { ...item, name: values.name }
-              : item
-          )
-        );
-        setToaster({
-          variant: "success",
-          message: "Kategori berhasil diupdate",
-        });
-      }
-    } catch (err: any) {
-      console.log(err);
-      setError(err?.response?.data?.msg || "Internal Server Error");
+    if (res?.data?.data) {
+      setLoading(false);
+      setOpenModal(false);
+      setData((prev: any) =>
+        prev.map((item: { _id: string; name: string }) =>
+          item._id === selectedCategories?._id
+            ? { ...item, name: values.name }
+            : item
+        )
+      );
+      setToaster({
+        variant: "success",
+        message: "Kategori berhasil diupdate",
+      });
+    } else {
+      setLoading(false);
+      setOpenModal(false);
+      console.log(res?.response?.data?.msg);
+      setError(res?.response?.data?.msg || "Internal Server Error");
       setToaster({
         variant: "danger",
-        message: err?.response?.data?.msg || "Internal Server Error",
+        message: res?.response?.data?.msg || "Internal Server Error",
       });
-    } finally {
-      setLoading(false);
     }
   }
 
