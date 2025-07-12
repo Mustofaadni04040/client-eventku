@@ -48,7 +48,7 @@ export default function CreateCategoriesPage() {
       });
     } else {
       setLoading(false);
-      console.log(error);
+      console.log(response?.response?.data?.msg);
       setError(response?.response?.data?.msg || "Internal Server Error");
       setToaster({
         variant: "danger",

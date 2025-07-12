@@ -21,34 +21,32 @@ export default function ModalDeleteCategories({
   async function onSubmit() {
     setLoading(true);
 
-    try {
-      const { token } = getAuth();
-      const res = await deleteData(
-        `/cms/categories/${selectedCategories?._id}`,
-        token
-      );
+    const { token } = getAuth();
+    const res = await deleteData(
+      `/cms/categories/${selectedCategories?._id}`,
+      token
+    );
 
-      if (res?.status === 200) {
-        setOpenModal(false);
-        setData(
-          data &&
-            data.filter(
-              (item: { _id: string; name: string }) =>
-                item._id !== selectedCategories?._id
-            )
-        );
-        setToaster({
-          variant: "success",
-          message: "Kategori berhasil dihapus",
-        });
-      }
-    } catch (err: any) {
-      console.log(err);
+    if (res?.status === 200) {
+      setLoading(false);
+      setOpenModal(false);
+      setData(
+        data &&
+          data.filter(
+            (item: { _id: string; name: string }) =>
+              item._id !== selectedCategories?._id
+          )
+      );
+      setToaster({
+        variant: "success",
+        message: "Kategori berhasil dihapus",
+      });
+    } else {
+      console.log(res?.response?.data?.msg);
       setToaster({
         variant: "danger",
-        message: err?.response?.data?.msg || "Internal Server Error",
+        message: res?.response?.data?.msg || "Internal Server Error",
       });
-    } finally {
       setLoading(false);
       setOpenModal(false);
     }
