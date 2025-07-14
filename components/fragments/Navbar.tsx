@@ -124,19 +124,19 @@ export default function Navbar() {
             )}
           </nav>
 
-          <Popover>
-            <PopoverTrigger>
-              <Image
-                src="/default.jpeg"
-                width={50}
-                height={50}
-                alt="profile"
-                className="rounded-full w-8 h-auto object-cover"
-              />
-            </PopoverTrigger>
-            <PopoverContent className="w-fit p-0">
-              <PopoverClose asChild>
-                {token ? (
+          {token ? (
+            <Popover>
+              <PopoverTrigger>
+                <Image
+                  src="/default.jpeg"
+                  width={50}
+                  height={50}
+                  alt="profile"
+                  className="rounded-full w-8 h-auto object-cover"
+                />
+              </PopoverTrigger>
+              <PopoverContent className="w-fit p-0">
+                <PopoverClose asChild>
                   <Button
                     type="button"
                     classname="bg-transparent text-primary hover:bg-slate-100"
@@ -144,17 +144,18 @@ export default function Navbar() {
                   >
                     Sign Out
                   </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    classname="bg-transparent border border-primary text-primary hover:bg-slate-100"
-                  >
-                    Sign In
-                  </Button>
-                )}
-              </PopoverClose>
-            </PopoverContent>
-          </Popover>
+                </PopoverClose>
+              </PopoverContent>
+            </Popover>
+          ) : (
+            <Button
+              type="button"
+              classname="bg-transparent border border-primary text-primary hover:bg-slate-100"
+              onClick={() => router.push("/auth/signin")}
+            >
+              Sign In
+            </Button>
+          )}
         </div>
       </div>
     </div>
